@@ -139,11 +139,13 @@
   /*---------------------
     Counter
   ---------------------*/
-  var timer = $('.timer');
-  if(timer.length) {
-    timer.appear(function () {
-      timer.countTo();
-    })
+  var timers = $('.timer');
+  if (timers.length) {
+    timers.each(function () {
+      $(this).appear(function () {
+        $(this).countTo();
+      });
+    });
   }
   
   /*---------------------

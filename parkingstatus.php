@@ -150,65 +150,136 @@
       </div>
      </div>
     </header>
-    <!-- 開頭橫幅開始 -->
-    <section class="intro-area">
+    <!-- 上方背景橫幅開始-->
+    <section class="breadcrumb-area">
+     <div class="breadcrumb-content text-center">
+      <h1>停車場狀態</h1>
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.php">首頁</a></li>
+        <li class="breadcrumb-item active" aria-current="page">停車場狀態</li>
+       </ol>
+      </nav>
+     </div>
+    </section>
+    <!-- 上方背景橫幅結束-->
+    <!-- 各停車場目前使用狀態開始 -->
+    <br>
+    <section class="service-provide-area">
      <div class="container">
       <div class="row">
-       <div class="col-md-12 col-lg-5 col-xl-6">
-        <div class="intro-content">
-         <h1 class="intro-title"></h1>
-         <p>此為2023 TSMC IT CareerHack中為了台積電所設計的專屬智慧停車管理系統。
-          <br>環境模擬於台積電的四處停車場，搭配影像辨識車牌，盼能妥善的運用車位庫存，使開車員工到達辦公場所快速、有效率地的滿足其停車需求,並同時節省警勤巡檢人力。</p>
-         <a class="btn" href="parkingstatus.php">停車場狀態</a>
+       <div class="col-md-12">
+        <div class="section-title">
+         <h2>各停車場目前使用狀態</h2>
+         <div class="section-line">
+          <span></span>
+         </div>
         </div>
        </div>
-       <div class="col-md-12 col-lg-7 col-xl-6">
-        <div class="intro-image-block">
-         <div class="shape-image-1 wow fadeInDown" data-wow-delay="0.5s">
-          <img src="img/hero/vector-1.png" alt="shape" />
+      </div>
+      <div class="row">
+       <div class="col-md-12">
+        <div class="service-provide-block">
+         <div class="service-provide-single">
+          <img src="img/projects/1.jpg" alt="img" />
+          <h4><a>A停車場</a></h4>
+          <p>台積電F12P1-張忠謀大樓</p>
+          <div class="counter-content-single">
+            <h4>停車場可用空位</h4>
+            <h2>  
+              <?php
+                echo "<span class='timer' data-from='0' data-to='$ParkASpace' data-speed='5000' data-refresh-interval='50'></span>";
+              ?>
+            </h2>
+          </div>
+         </div> 
+         <div class="service-provide-single">
+          <img src="img/projects/2.jpg" alt="img" />
+          <h4><a>B停車場</a></h4>
+          <p>台積電五廠</p>
+          <div class="counter-content-single">
+            <h4>停車場可用空位</h4>
+            <h2>  
+              <?php
+                echo "<span class='timer' data-from='0' data-to='$ParkBSpace' data-speed='5000' data-refresh-interval='50'></span>";
+              ?>
+            </h2>
+          </div>
          </div>
+         <div class="service-provide-single">
+          <img src="img/projects/3.jpg" alt="img" />
+          <h4><a>C停車場</a></h4>
+          <p>台積電十二廠P6</p>
+          <div class="counter-content-single">
+            <h4>停車場可用空位</h4>
+            <h2>  
+              <?php
+                echo "<span class='timer' data-from='0' data-to='$ParkCSpace' data-speed='5000' data-refresh-interval='50'></span>";
+              ?>
+            </h2>
+          </div>
+         </div>
+         <div class="service-provide-single">
+          <img src="img/projects/4.jpg" alt="img" />
+          <h4><a>D停車場</a></h4>
+          <p>台積電十二廠P4,5</p>
+          <div class="counter-content-single">
+            <h4>停車場可用空位</h4>
+            <h2>  
+              <?php
+                echo "<span class='timer' data-from='0' data-to='$ParkDSpace' data-speed='5000' data-refresh-interval='50'></span>";
+              ?>
+            </h2>
+          </div>
          </div>
         </div>
        </div>
       </div>
      </div>
     </section>
-    <!-- 開頭橫幅結束 -->
-    <!-- 系統特點開始 -->
-    <section class="services-area section-padding">
+    <!-- 各停車場目前使用狀態結束 -->
+    <!-- 台積電簡介開始 -->
+    <section class="analysis-area section-padding">
      <div class="container">
       <div class="row">
-       <div class="col-md-6 col-lg-4">
-        <div class="service-single">
-         <div class="service-icon">
-          <img src="img/services/1.png" alt="Service" />
+       <div class="col-md-12 col-lg-12 col-xl-6">
+        <div class="analysis-mask-block">
+         <img src="img/services/shape.png" alt="img" />
+         <div class="analysis-mask">
+          <div class="analysis-mask-image">
+           <img src="img/services/4.jpg" alt="img" />
+          </div>
          </div>
-         <h3>便利協尋</h3>
-         <p>鍵入車牌後可迅速找尋愛車所在位置<br>讓你不在為了找車而煩惱</p>
         </div>
        </div>
-       <div class="col-md-6 col-lg-4">
-        <div class="service-single">
-         <div class="service-icon">
-          <img src="img/services/2.png" alt="Service" />
+       <div class="col-md-12 col-lg-12 col-xl-6">
+        <div class="analysis-content">
+         <h2>台積電集團</h2>
+         <p>
+           　　台灣積體電路製造(Taiwan Semiconductor Manufacturing Co., Ltd.)，簡稱台積電或TSMC，與旗下公司合稱時則稱作台積電集團<br>
+           　　是臺灣一家從事晶圓代工的公司，為全球規模最大的半導體製造廠，可量產的邏輯IC為全球最先進的製程，總部位於新竹科學園區，主要廠房則分布於臺灣的新竹、臺中、臺南等科學園區<br>
+           　　2021年8月，台積電在美國《財富》雜誌評選「全球最大500家公司」排行榜中，依營收規模名列全球第251名。2019年8月，台積電在PwC發表的「全球頂尖100家公司」排行榜中，依公司市場價值名列全球第37名
+         </p>
+         <div class="about-count">
+          <div class="counter-content-single">
+           <h2><span class="timer" data-from="0" data-to="<?php echo $ParkALLSpace;?>" data-speed="5000" data-refresh-interval="50"></span></h2>
+           <h4>停車場可用空位</h4>
+          </div>
+          <div class="counter-content-single">
+           <h2><span class="timer" data-from="0" data-to="<?php echo $ALLVIP;?>" data-speed="5000" data-refresh-interval="50"></span></h2>
+           <h4>VIP車位可預約空位</h4>
+          </div>
+          <div class="counter-content-single">
+           <h2><span class="timer" data-from="0" data-to="<?php echo $RecordCount;?>" data-speed="5000" data-refresh-interval="50"></span></h2>
+           <h4>已完成停車紀錄</h4>
+          </div>
          </div>
-         <h3>方便控管</h3>
-         <p>管理方可以清楚了解各車位使用情況<br>也可妥善運用停車場空間</p>
-        </div>
-       </div>
-       <div class="col-md-6 col-lg-4">
-        <div class="service-single">
-         <div class="service-icon">
-          <img src="img/services/3.png" alt="Service" />
-         </div>
-         <h3>VIP車位服務</h3>
-         <p>到訪本公司的貴客<br>可在此系統為您的愛車預約一個專屬車位</p>
         </div>
        </div>
       </div>
      </div>
     </section>
-    <!-- 系統特點結束 -->
+    <!-- 台積電簡介結束 -->
     <!-- 停車場位址開始 -->
     <section class="project-area">
      <div class="container-fluid">
@@ -277,91 +348,6 @@
      </div>
     </section>
     <!-- 停車場位址結束 -->
-    <!-- 台積電簡介開始 -->
-    <section class="analysis-area section-padding">
-     <div class="container">
-      <div class="row">
-       <div class="col-md-12 col-lg-12 col-xl-6">
-        <div class="analysis-mask-block">
-         <img src="img/services/shape.png" alt="img" />
-         <div class="analysis-mask">
-          <div class="analysis-mask-image">
-           <img src="img/services/4.jpg" alt="img" />
-          </div>
-         </div>
-        </div>
-       </div>
-       <div class="col-md-12 col-lg-12 col-xl-6">
-        <div class="analysis-content">
-         <h2>台積電集團</h2>
-         <p>
-           　　台灣積體電路製造(Taiwan Semiconductor Manufacturing Co., Ltd.)，簡稱台積電或TSMC，與旗下公司合稱時則稱作台積電集團<br>
-           　　是臺灣一家從事晶圓代工的公司，為全球規模最大的半導體製造廠，可量產的邏輯IC為全球最先進的製程，總部位於新竹科學園區，主要廠房則分布於臺灣的新竹、臺中、臺南等科學園區<br>
-           　　2021年8月，台積電在美國《財富》雜誌評選「全球最大500家公司」排行榜中，依營收規模名列全球第251名。2019年8月，台積電在PwC發表的「全球頂尖100家公司」排行榜中，依公司市場價值名列全球第37名
-         </p>
-         <div class="about-count">
-          <div class="counter-content-single">
-           <h2><span class="timer" data-from="0" data-to="<?php echo $ParkALLSpace;?>" data-speed="5000" data-refresh-interval="50"></span></h2>
-           <h4>停車場可用空位</h4>
-          </div>
-          <div class="counter-content-single">
-           <h2><span class="timer" data-from="0" data-to="<?php echo $ALLVIP;?>" data-speed="5000" data-refresh-interval="50"></span></h2>
-           <h4>VIP車位可預約空位</h4>
-          </div>
-          <div class="counter-content-single">
-           <h2><span class="timer" data-from="0" data-to="<?php echo $RecordCount;?>" data-speed="5000" data-refresh-interval="50"></span></h2>
-           <h4>已完成停車紀錄</h4>
-          </div>
-         </div>
-        </div>
-       </div>
-      </div>
-     </div>
-    </section>
-    <!-- 台積電簡介結束 -->
-    <!-- 開發團隊開始 -->
-    <section class="service-provide-area">
-     <div class="container">
-      <div class="row">
-       <div class="col-md-12">
-        <div class="section-title">
-         <h2>系統開發團隊</h2>
-         <div class="section-line">
-          <span></span>
-         </div>
-         <p>本系統由四位來自 國立臺灣海洋大學 與 國立臺東大學 的同學開發而成</p>
-        </div>
-       </div>
-      </div>
-      <div class="row">
-       <div class="col-md-12">
-        <div class="service-provide-block">
-         <div class="service-provide-single">
-          <img src="img/hero/1.png" alt="img" />
-          <h4><a>劉紀佑</a></h4>
-          <p>國立臺東大學<br>資訊工程學系<br>碩士二年級</p>
-         </div> 
-         <div class="service-provide-single">
-          <img src="img/hero/2.png" alt="img" />
-          <h4><a>吳振榮</a></h4>
-          <p>國立臺灣海洋大學<br>資訊工程學系<br>碩士一年級</p>
-         </div>
-         <div class="service-provide-single">
-          <img src="img/hero/3.png" alt="img" />
-          <h4><a>葉航葦</a></h4>
-          <p>國立臺灣海洋大學<br>資訊工程學系<br>碩士一年級</p>
-         </div>
-         <div class="service-provide-single">
-          <img src="img/hero/4.png" alt="img" />
-          <h4><a>曾宥慈</a></h4>
-          <p>國立臺東大學<br>資訊工程學系<br>大學四年級</p>
-         </div>
-        </div>
-       </div>
-      </div>
-     </div>
-    </section>
-    <!-- 開發團隊結束 -->
     <!-- 停車場連結開始 -->
     <div class="client-log-area section-padding">
      <div class="container">
