@@ -2,6 +2,9 @@
 <html lang="zh-TW">
   <?php
     session_start();//開啟session
+    if(isset($_SESSION["TSMC_Islogin"])==false) {      
+			echo"<script  language=\"JavaScript\">alert('請先登入');location.href=\"login.php\";</script>";
+    }
     include_once ("conn_mysql.php");
     /*計算空車位*/
     $Sql_query_parkstatusA="SELECT COUNT(*) AS res FROM `parkstatusa` WHERE `Isparked`=0";
@@ -53,43 +56,27 @@
     while($row=mysqli_fetch_array($RecordCount_result)){
       $RecordCount=$row['res'];
     }
-    /*查詢每一格各自狀態*/
-    $Sql_query_parkstatusA="SELECT * FROM `parkstatusa`";
-    $ParkstatusA_result=mysqli_query($db_link,$Sql_query_parkstatusA) or die("查詢失敗");//查詢帳密
-    $ParkASpaceStatus=array();
-    while($row=mysqli_fetch_array($ParkstatusA_result)){
-      if($row['IsUsed']==0)//位置不可用
-        $ParkASpaceStatus[$row['SpaceID']]=2;
-      else
-      $ParkASpaceStatus[$row['SpaceID']]=$row['IsParked'];
+    /*檢查白名單刪除*/
+    $sql_query_delwhite="SELECT * FROM `whitelist` WHERE 1";
+    $delwhite_result=mysqli_query($db_link,$sql_query_delwhite) or die("查詢失敗");
+    while($row=mysqli_fetch_array($delwhite_result)){
+      if(isset($_POST['delwhite'.$row['_ID']])){
+        $sql_query_del="DELETE FROM `whitelist` WHERE `_ID`='".$row['_ID']."'";
+        $del_result=mysqli_query($db_link,$sql_query_del) or die("查詢失敗");
+        break;
+      }
     }
-    $Sql_query_parkstatusB="SELECT * FROM `parkstatusb`";
-    $ParkstatusB_result=mysqli_query($db_link,$Sql_query_parkstatusB) or die("查詢失敗");//查詢帳密
-    $ParkBSpaceStatus=array();
-    while($row=mysqli_fetch_array($ParkstatusB_result)){
-      if($row['IsUsed']==0)//位置不可用
-        $ParkBSpaceStatus[$row['SpaceID']]=2;
-      else
-      $ParkBSpaceStatus[$row['SpaceID']]=$row['IsParked'];
+    /*檢查黑名單刪除*/
+    $sql_query_delblack="SELECT * FROM `blacklist` WHERE 1";
+    $delblack_result=mysqli_query($db_link,$sql_query_delblack) or die("查詢失敗");
+    while($row=mysqli_fetch_array($delblack_result)){
+      if(isset($_POST['delblack'.$row['_ID']])){
+        $sql_query_del="DELETE FROM `blacklist` WHERE `_ID`='".$row['_ID']."'";
+        $del_result=mysqli_query($db_link,$sql_query_del) or die("查詢失敗");
+        break;
+      }
     }
-    $Sql_query_parkstatusC="SELECT * FROM `parkstatusc`";
-    $ParkstatusC_result=mysqli_query($db_link,$Sql_query_parkstatusC) or die("查詢失敗");//查詢帳密
-    $ParkCSpaceStatus=array();
-    while($row=mysqli_fetch_array($ParkstatusC_result)){
-      if($row['IsUsed']==0)//位置不可用
-        $ParkCSpaceStatus[$row['SpaceID']]=2;
-      else
-      $ParkCSpaceStatus[$row['SpaceID']]=$row['IsParked'];
-    }
-    $Sql_query_parkstatusD="SELECT * FROM `parkstatusd`";
-    $ParkstatusD_result=mysqli_query($db_link,$Sql_query_parkstatusD) or die("查詢失敗");//查詢帳密
-    $ParkDSpaceStatus=array();
-    while($row=mysqli_fetch_array($ParkstatusD_result)){
-      if($row['IsUsed']==0)//位置不可用
-        $ParkDSpaceStatus[$row['SpaceID']]=2;
-      else
-      $ParkDSpaceStatus[$row['SpaceID']]=$row['IsParked'];
-    }
+  
   ?>
  <head>
   <meta charset="utf-8" />
@@ -190,16 +177,144 @@
     <!-- 上方背景橫幅開始-->
     <section class="breadcrumb-area">
      <div class="breadcrumb-content text-center">
-      <h1>停車場狀態</h1>
+      <h1>黑白名單設定</h1>
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="index.php">首頁</a></li>
-        <li class="breadcrumb-item active" aria-current="page">停車場狀態</li>
+        <li class="breadcrumb-item active" aria-current="page">黑白名單設定</li>
        </ol>
       </nav>
      </div>
     </section>
-    <!-- 上方背景橫幅結束-->
+    <!-- 上方背景橫幅結束-->    
+    <!-- 白名單設定開始 -->
+    <br>
+    <section class="service-provide-area">
+     <div class="container">
+      <div class="row">
+        <table width="100%" style="border: 1px solid red;">
+          <thead>
+          <tr>
+              <th colspan="20" style="border: 1px solid red;text-align:center;">
+                <form action="setlist.php" method="POST" style="width:100%;">
+                  <legend>白名單設定(白名單權力>黑名單)</legend>
+                  <table style='width:100%;text-align:center;align:center;'>
+                    <tr>
+                      <td style="width: 50%;">白名單(僅大寫英文+數字)</td>
+                      <td style="width: 50%;"><input required type="text" name="License"  id="LicenseInput1"/></td>
+                    </tr>              
+                    <tr>
+                      <td style="width: 50%;">起始時間：</td>
+                      <td style="width: 50%;"><input required type="datetime-local" name="StartTime"/></td>
+                    </tr>
+                    <tr>
+                      <td style="width: 50%;">結束時間：</td>
+                      <td style="width: 50%;"><input required type="datetime-local" name="EndTime"/></td>
+                    </tr>
+                    <tr>
+                      <td style="width: 50%;">紀錄事由：</td>
+                      <td style="width: 50%;"><input required type="text" name="Info"/></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"><input type="submit" name="whitelist" value="設定白名單"  style="width: 50%;" class="login_btn"/></td>
+                    </tr>
+                  </table>
+                </form>
+              </th>
+            </tr>
+            <tr>
+              <th colspan="20" style="border: 1px solid red;text-align:center;">
+                <form action="setlist.php" method="POST" style="width:100%;">
+                  <legend>黑名單設定(白名單權力>黑名單)</legend>
+                  <table style='width:100%;text-align:center;align:center;'>
+                    <tr>
+                      <td style="width: 50%;">黑名單(僅大寫英文+數字)</td>
+                      <td style="width: 50%;"><input required type="text" name="License"  id="LicenseInput2"/></td>
+                    </tr>              
+                    <tr>
+                      <td style="width: 50%;">起始時間：</td>
+                      <td style="width: 50%;"><input required type="datetime-local" name="StartTime"/></td>
+                    </tr>
+                    <tr>
+                      <td style="width: 50%;">結束時間：</td>
+                      <td style="width: 50%;"><input required type="datetime-local" name="EndTime"/></td>
+                    </tr>
+                    <tr>
+                      <td style="width: 50%;">紀錄事由：</td>
+                      <td style="width: 50%;"><input required type="text" name="Info"/></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"><input type="submit" name="blacklist" value="設定黑名單"  style="width: 50%;" class="login_btn"/></td>
+                    </tr>
+                  </table>
+                </form>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+          <form action="blackwhitelist.php" method="POST" style="width:100%;">
+            <tr>
+              <td colspan='5' style='text-align:center;color:green;'>已設定之白名單</td>
+            </tr>
+            <tr style='color:green;'> 
+              <td style='text-align:center;'>車牌</td>
+              <td style='text-align:center;'>起始時間</td>
+              <td style='text-align:center;'>結束時間</td>
+              <td style='text-align:center;'>紀錄事由</td>
+              <td style='text-align:center;'>狀態</td>
+            </tr>
+              <?php
+                $sql_query_whitelist="SELECT * FROM `whitelist` WHERE 1";
+                $whitelist_result=mysqli_query($db_link,$sql_query_whitelist) or die("查詢失敗");//查詢帳密
+                while($row=mysqli_fetch_array($whitelist_result)){
+                  echo "<tr style='color:green;'>";
+                  echo "<td style='text-align:center;'>".$row['License']."</td>";
+                  echo "<td style='text-align:center;'>".$row['StartTime']."</td>";
+                  echo "<td style='text-align:center;'>".$row['EndTime']."</td>";
+                  echo "<td style='text-align:center;'>".$row['Info']."</td>";
+                  echo "<td style='text-align:center;'><input type='submit' name='delwhite".$row['_ID']."' value='取消白名單'/></td>";
+                  echo "</tr>";
+                }
+              ?>
+            <tr style='color:red;'>
+              <td colspan='5' style='text-align:center;'>已設定之黑名單</td>
+            </tr>
+            <tr style='color:red;'>
+              <td style='text-align:center;'>車牌</td>
+              <td style='text-align:center;'>起始時間</td>
+              <td style='text-align:center;'>結束時間</td>
+              <td style='text-align:center;'>紀錄事由</td>
+              <td style='text-align:center;'>狀態</td>
+            </tr>
+              <?php
+                $sql_query_blacklist="SELECT * FROM `blacklist` WHERE 1";
+                $blacklist_result=mysqli_query($db_link,$sql_query_blacklist) or die("查詢失敗");//查詢帳密
+                while($row=mysqli_fetch_array($blacklist_result)){
+                  echo "<tr style='color:red;'>";
+                  echo "<td style='text-align:center;'>".$row['License']."</td>";
+                  echo "<td style='text-align:center;'>".$row['StartTime']."</td>";
+                  echo "<td style='text-align:center;'>".$row['EndTime']."</td>";
+                  echo "<td style='text-align:center;'>".$row['Info']."</td>";
+                  echo "<td style='text-align:center;'><input type='submit' name='delblack".$row['_ID']."' value='取消黑名單'/></td>";
+                  echo "</tr>";
+                }
+              ?>
+            </form>
+          </tbody>
+        </table>
+      </div>
+     </div>
+    </section>
+    <!-- 白名單設定結束 -->
+    <script>
+      document.getElementById("LicenseInput1").onkeyup = function() {
+        this.value = this.value.replace(/[^A-Z0-9]/g, "").substr(0, 7);//限定大寫英文+數字與7碼
+      };
+      document.getElementById("LicenseInput2").onkeyup = function() {
+        this.value = this.value.replace(/[^A-Z0-9]/g, "").substr(0, 7);//限定大寫英文+數字與7碼
+      };
+    </script>
+    <!-- 預約表單結束 -->
     <!-- 各停車場目前使用狀態開始 -->
     <br>
     <section class="service-provide-area">
@@ -275,112 +390,7 @@
      </div>
     </section>
     <!-- 各停車場目前使用狀態結束 -->
-    
-    <!-- 各停車場目前使用狀態開始 -->
-    <br>
-    <section class="service-provide-area">
-     <div class="container">
-      <div class="row">
-        <table width="100%" style="border: 1px solid red;">
-          <thead>
-            <tr>
-              <th colspan="20" style="border: 1px solid red;text-align:center;">A停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-            for($i=0;$i<5;$i++){
-              echo "<tr>";
-              for($j=0;$j<20;$j++){
-                if($ParkASpaceStatus[$i*20+$j]==0)
-                  $BgColor="green";
-                  else if($ParkASpaceStatus[$i*20+$j]==1)
-                    $BgColor="red";
-                  else if($ParkASpaceStatus[$i*20+$j]==2)//暫停使用
-                    $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
-              }
-              echo "</tr>";
-            }
-          ?>
-          </tbody>
-        </table>
-        <table width="100%" style="border: 1px solid red;">
-          <thead>
-            <tr>
-              <th colspan="20" style="border: 1px solid red;text-align:center;">B停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-            for($i=0;$i<5;$i++){
-              echo "<tr>";
-              for($j=0;$j<20;$j++){
-                if($ParkBSpaceStatus[$i*20+$j]==0)
-                  $BgColor="green";
-                  else if($ParkBSpaceStatus[$i*20+$j]==1)
-                    $BgColor="red";
-                  else if($ParkBSpaceStatus[$i*20+$j]==2)//暫停使用
-                    $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
-              }
-              echo "</tr>";
-            }
-          ?>
-          </tbody>
-        </table>
-        <table width="100%" style="border: 1px solid red;">
-          <thead>
-            <tr>
-              <th colspan="20" style="border: 1px solid red;text-align:center;">C停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-            for($i=0;$i<5;$i++){
-              echo "<tr>";
-              for($j=0;$j<20;$j++){
-                if($ParkCSpaceStatus[$i*20+$j]==0)
-                  $BgColor="green";
-                  else if($ParkCSpaceStatus[$i*20+$j]==1)
-                    $BgColor="red";
-                  else if($ParkCSpaceStatus[$i*20+$j]==2)//暫停使用
-                    $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
-              }
-              echo "</tr>";
-            }
-          ?>
-          </tbody>
-        </table>
-        <table width="100%" style="border: 1px solid red;">
-          <thead>
-            <tr>
-              <th colspan="20" style="border: 1px solid red;text-align:center;">D停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-            for($i=0;$i<5;$i++){
-              echo "<tr>";
-              for($j=0;$j<20;$j++){
-                if($ParkDSpaceStatus[$i*20+$j]==0)
-                  $BgColor="green";
-                  else if($ParkDSpaceStatus[$i*20+$j]==1)
-                    $BgColor="red";
-                  else if($ParkDSpaceStatus[$i*20+$j]==2)//暫停使用
-                    $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
-              }
-              echo "</tr>";
-            }
-          ?>
-          </tbody>
-        </table>
-      </div>
-     </div>
-    </section>
-    <!-- 各停車場目前使用狀態結束 -->
+
     <!-- 台積電簡介開始 -->
     <section class="analysis-area section-padding">
      <div class="container">

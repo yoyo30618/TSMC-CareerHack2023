@@ -2,7 +2,32 @@
 <html lang="zh-TW">
   <?php
     session_start();//開啟session
+    if(isset($_SESSION["TSMC_Islogin"])==false) {      
+			echo"<script  language=\"JavaScript\">alert('請先登入');location.href=\"login.php\";</script>";
+    }
     include_once ("conn_mysql.php");
+    if(isset($_POST['AddInfo'])){
+      $sql_query_AddInfo="INSERT INTO `person`(`Name`, `Cname`,`Department`, `Job`,  `License`) VALUES ('".$_POST['AddName']."','".$_POST['AddCname']."','".$_POST['AddDepartment']."','".$_POST['AddJob']."','".$_POST['AddLicense']."')";
+      $AddInfo_result=mysqli_query($db_link,$sql_query_AddInfo) or die("查詢失敗");//查詢帳密
+    }
+    $sql_query_CheckInfo="SELECT * FROM `person` WHERE 1";
+    $CheckInfo_result=mysqli_query($db_link,$sql_query_CheckInfo) or die("查詢失敗");//查詢帳密
+    while($row=mysqli_fetch_array($CheckInfo_result)){
+      if(isset($_POST['UpdateInfo'.$row['_ID']])){
+
+        $sql_query_UpdateInfo="UPDATE `person` SET `Name`='".$_POST['UpdateName'.$row['_ID']]."',`Cname`='".$_POST['UpdateCname'.$row['_ID']]."',`Department`='".$_POST['UpdateDepartment'.$row['_ID']]."',`Job`='".$_POST['UpdateJob'.$row['_ID']]."',`License`='".$_POST['UpdateLicense'.$row['_ID']]."' WHERE  `_ID`='".$row['_ID']."'
+        ";
+        $UpdateInfo_result=mysqli_query($db_link,$sql_query_UpdateInfo) or die("查詢失敗");//查詢帳密
+        break;
+      }
+      else if(isset($_POST['DelInfo'.$row['_ID']])){
+        $sql_query_DelInfo="DELETE FROM `person` WHERE `_ID`='".$row['_ID']."'";
+        $DelInfo_result=mysqli_query($db_link,$sql_query_DelInfo) or die("查詢失敗");//查詢帳密
+        break;
+      }
+
+    }
+		
   ?>
  <head>
   <meta charset="utf-8" />
@@ -103,92 +128,167 @@
     <!-- 上方背景橫幅開始-->
     <section class="breadcrumb-area">
      <div class="breadcrumb-content text-center">
-      <h1>尋找愛車</h1>
+      <h1>後臺管理</h1>
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="index.php">首頁</a></li>
-        <li class="breadcrumb-item active" aria-current="page">尋找愛車</li>
+        <li class="breadcrumb-item active" aria-current="page">後臺管理</li>
        </ol>
       </nav>
      </div>
     </section>
     <!-- 上方背景橫幅結束-->
-    <!-- 查詢車牌開始 -->
+    <!-- 查詢開始 -->
     <section class="intro-area">
       <div class="container" align="middle">
-        <form action="findcar.php" method="POST">
-          <legend>請輸入欲查詢之車牌(大寫英文+數字)</legend>
+        <form action="CheckCarEnter.php" method="POST" enctype="multipart/form-data">
+          <legend>模擬車輛入場</legend>
           <table>
             <tr>
-              <td>車牌號碼(大寫英文+數字)</td>
-              <td><input type="text" name="License" id="LicenseInput"></td>
+              <td>車牌號碼(英文+數字)(供無照片時使用)</td>
+              <td><input type="text" name="LicenseEnterCode" id="LicenseInput1"></td>
+              <td>&nbsp;&nbsp;or&nbsp;&nbsp;<input type="file" name="LicenseEnterPhoto" accept="image/*"/></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><input type="submit" name="CheckCarEnter" value="模擬入場"  style="width: 100%;" class="login_btn"/></td>
+              <td></td>
+            </tr>
+          </table>
+        </form>      
+        <br>  
+        <form action="CheckCarParked.php" method="POST" enctype="multipart/form-data">
+          <legend>模擬車輛停妥</legend>
+          <table>
+            <tr>
+              <td>車牌號碼(英文+數字)(供無照片時使用)</td>
+              <td><input type="text" name="LicenseParkedCode" id="LicenseInput2"></td>
+              <td>&nbsp;&nbsp;or&nbsp;&nbsp;<input type="file" name="LicenseParkedPhoto" data-target="file-uploader" accept="image/*"/></td>
+            </tr>
+            <tr>
+              <td>車位編號</td>
+              <td colspan="2"><input required type="text" name="SpaceID" id="LicenseInput3"></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><input type="submit" name="CheckCarParked" value="模擬停妥"  style="width: 100%;" class="login_btn"/></td>
+              <td></td>
+            </tr>
+          </table>
+        </form>
+        <br>
+        <form action="CheckCarLeave.php" method="POST" enctype="multipart/form-data">
+          <legend>模擬車輛出場</legend>
+          <table>
+            <tr>
+              <td>車牌號碼(英文+數字)(供無照片時使用)</td>
+              <td><input type="text" name="LicenseLeaveCode" id="LicenseInput4"></td>
+              <td>&nbsp;&nbsp;or&nbsp;&nbsp;<input  name="LicenseLeavePhoto"  type="file" data-target="file-uploader" accept="image/*"/></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><input type="submit" name="CheckCarLeave" value="模擬出場"  style="width: 100%;" class="login_btn"/></td>
+              <td></td>
+            </tr>
+          </table>
+        </form>  
+      </div>
+      <br>
+      <div class="container" align="middle">
+        <form action="admin.php" method="POST">
+          <legend>車位使用歷程</legend>
+          <table>
+            <tr>
+              <td>車位編號(英文+數字)</td>
+              <td><input type="text" name="SpaceID" id="LicenseInput5"></td>
             </tr>
             <tr>
               <td colspan="2"><input type="submit" name="login" value="查詢"  style="width: 100%;" class="login_btn"/></td>
             </tr>
-          </form>
           </table>
+        </form>
+      </div>
+      <br>
+      <div class="container" align="middle">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="section-title">
+              <h2>車位使用歷程</h2>
+              <div class="section-line">
+                <span></span>
+              </div>
+              <table width="100%" style="border: 1px solid red;">
+                <thead>
+                  <tr>
+                    <th style="border: 1px solid red;width: 20%;">車牌</th>
+                    <th style="border: 1px solid red;width: 20%;">停放車格</th>
+                    <th style="border: 1px solid red;width: 20%;">入場時間</th>
+                    <th style="border: 1px solid red;width: 20%;">出場時間</th>
+                    <th style="border: 1px solid red;width: 20%;">停放時長</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <?php
+                      if(isset($_POST['SpaceID'])){
+                        $sql_query_FindCar="SELECT * FROM `parkingrecord` WHERE `SpaceID` like '%".$_POST['SpaceID']."%'";
+                        $FindCar_result=mysqli_query($db_link,$sql_query_FindCar) or die("查詢失敗");
+                        $Find=0;
+                        while($row=mysqli_fetch_array($FindCar_result)){
+                          $Find=1;
+                          echo "<tr>";
+                          echo "<td style='border: 1px solid red;width: 20%;'>".$row['License']."</td>";
+                          echo "<td style='border: 1px solid red;width: 20%;'>".$row['SpaceID']."</td>";
+                          echo "<td style='border: 1px solid red;width: 20%;'>".$row['EnterTime']."</td>";
+                          echo "<td style='border: 1px solid red;width: 20%;'>".$row['LeaveTime']."</td>";
+                          if($row['LeaveTime']==null){
+                            echo "<td>無法查詢</td>";
+                          }
+                          else{
+                            $diff = date_diff(new DateTime(date( "Y-m-d H:i:s")), new DateTime($row['EnterTime']));
+                            echo "<td style='border: 1px solid red;width: 20%;'>".$diff->format("%d 天 %h 小時 %i 分鐘 %s 秒")."</td>";
+                          }
+                          echo "</tr>";
+                        }
+                        if($Find==0){//沒找到
+                          echo "<tr>";
+                          echo "<td colspan='5' style='border: 1px solid red;'>此車牌目前尚未無停車紀錄</td>";
+                        echo "</tr>";
+                        }
+                      }
+                      else{
+                        echo "<tr>";
+                        echo "<td colspan='5' style='border: 1px solid red;'>此車牌目前尚未無停車紀錄</td>";
+                        echo "</tr>";
+                      }
+                    ?>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
+    <!-- 查詢結束 -->
+    
     <script>
-      document.getElementById("LicenseInput").onkeyup = function() {
+      document.getElementById("LicenseInput1").onkeyup = function() {
+        this.value = this.value.replace(/[^A-Z0-9]/g, "").substr(0, 7);//限定大寫英文+數字與7碼
+      };
+      document.getElementById("LicenseInput2").onkeyup = function() {
+        this.value = this.value.replace(/[^A-Z0-9]/g, "").substr(0, 7);//限定大寫英文+數字與7碼
+      };
+      document.getElementById("LicenseInput3").onkeyup = function() {
+        this.value = this.value.replace(/[^A-Z0-9]/g, "").substr(0, 7);//限定大寫英文+數字與7碼
+      };
+      document.getElementById("LicenseInput4").onkeyup = function() {
+        this.value = this.value.replace(/[^A-Z0-9]/g, "").substr(0, 7);//限定大寫英文+數字與7碼
+      };
+      document.getElementById("LicenseInput5").onkeyup = function() {
         this.value = this.value.replace(/[^A-Z0-9]/g, "").substr(0, 7);//限定大寫英文+數字與7碼
       };
     </script>
-    <!-- 查詢車牌結束 -->
-    <!-- 停放紀錄開始 -->
-    <section class="service-provide-area">
-     <div class="container">
-      <div class="row">
-       <div class="col-md-12">
-        <div class="section-title">
-         <h2>尋找愛車</h2>
-         <div class="section-line">
-          <span></span>
-         </div>
-         <table width="100%" style="border: 1px solid red;">
-          <thead>
-            <tr>
-              <th style="border: 1px solid red;width: 25%;">車牌</th>
-              <th style="border: 1px solid red;width: 25%;">停放車格</th>
-              <th style="border: 1px solid red;width: 25%;">入場時間</th>
-              <th style="border: 1px solid red;width: 25%;">停放時長</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-          <?php
-            if(isset($_POST['License'])){
-              $sql_query_FindCar="SELECT * FROM `parkingrecord` WHERE `License`='".$_POST['License']."' AND `EnterTime`<'". date( "Y-m-d H:i:s")."' AND `LeaveTime` IS NULL";
-              $FindCar_result=mysqli_query($db_link,$sql_query_FindCar) or die("查詢失敗");
-              $Find=0;
-              while($row=mysqli_fetch_array($FindCar_result)){
-                $Find=1;
-                echo "<td style='border: 1px solid red;width: 25%;'>".$row['License']."</td>";
-                echo "<td style='border: 1px solid red;width: 25%;'>".$row['SpaceID']."</td>";
-                echo "<td style='border: 1px solid red;width: 25%;'>".$row['EnterTime']."</td>";
-                $diff = date_diff(new DateTime(date( "Y-m-d H:i:s")), new DateTime($row['EnterTime']));
-                echo "<td style='border: 1px solid red;width: 25%;'>".$diff->format("%d 天 %h 小時 %i 分鐘 %s 秒")."</td>";
-
-              }
-              if($Find==0){//沒找到
-                echo "<td colspan='4' style='border: 1px solid red;'>此車牌目前尚未無停車紀錄</td>";
-              }
-              echo "</tr>";
-            }
-            else{
-              echo "<td colspan='4' style='border: 1px solid red;'>此車牌目前尚未無停車紀錄</td>";
-            }
-          ?>
-            </tr>
-          </tbody>
-        </table>
-        </div>
-       </div>
-      </div>
-     </div>
-    </section>
-    <!-- 停放紀錄結束 -->
     <!-- 停車場連結開始 -->
     <div class="client-log-area section-padding">
      <div class="container">

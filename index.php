@@ -123,7 +123,7 @@
             <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP車位</a></li>
             <?php 
               if (isset($_SESSION['TSMC_Islogin'])&&$_SESSION['TSMC_Islogin']=="1"){
-                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個人資料設定</a></li>";
+                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個人資料查詢</a></li>";
                 if(isset($_SESSION['TSMC_Status'])&&$_SESSION['TSMC_Status']=="管理員"){
                   echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺管理</a></li>";
                   echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單設定</a></li>";   
@@ -418,7 +418,7 @@
             <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP車位</a></li>
             <?php 
               if (isset($_SESSION['TSMC_Islogin'])&&$_SESSION['TSMC_Islogin']=="1"){
-                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個人資料設定</a></li>";
+                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個人資料查詢</a></li>";
                 if(isset($_SESSION['TSMC_Status'])&&$_SESSION['TSMC_Status']=="管理員"){
                   echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺管理</a></li>";
                   echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單設定</a></li>";   

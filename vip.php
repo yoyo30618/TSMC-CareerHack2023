@@ -190,16 +190,93 @@
     <!-- 上方背景橫幅開始-->
     <section class="breadcrumb-area">
      <div class="breadcrumb-content text-center">
-      <h1>停車場狀態</h1>
+      <h1>預約VIP車位</h1>
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="index.php">首頁</a></li>
-        <li class="breadcrumb-item active" aria-current="page">停車場狀態</li>
+        <li class="breadcrumb-item active" aria-current="page">預約VIP車位</li>
        </ol>
       </nav>
      </div>
     </section>
-    <!-- 上方背景橫幅結束-->
+    <!-- 上方背景橫幅結束-->    
+    <!-- 各停車場目前使用狀態開始 -->
+    <br>
+    <section class="service-provide-area">
+     <div class="container">
+      <div class="row">
+        <table width="100%" style="border: 1px solid red;">
+          <thead>
+            <tr>
+              <th colspan="20" style="border: 1px solid red;text-align:center;">*VIP車位目前僅供A停車場預約*<br>A停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用/藍色代表目前選中)</th>
+            </tr>
+          </thead>
+          <tbody>
+          <?php
+            for($i=0;$i<5;$i++){
+              echo "<tr>";
+              for($j=0;$j<20;$j++){
+                if(isset($_GET['choose'])&&$_GET['choose']=="A".$i*20+$j)
+                  echo "<td bgcolor='blue' style='text-align:center'><a style='color:white'href='vip.php?choose=A".$i*20+$j."'>".$i*20+$j."</a></td>";
+                else
+                  echo "<td bgcolor='green' style='text-align:center'><a style='color:white'href='vip.php?choose=A".$i*20+$j."'>".$i*20+$j."</a></td>";
+              }
+              echo "</tr>";
+            }
+          ?>
+          </tbody>
+        </table>
+      </div>
+     </div>
+    </section>
+    <!-- 各停車場目前使用狀態結束 -->
+    <!-- 預約表單開始 -->
+    <section class="service-provide-area">
+     <div class="container">
+      <div class="row">
+        <h2 style="width:100%;color:red;text-align:center">請先於上方選擇欲預約之車位</h2>
+        <div style='width:100%;text-align:center;margin:0 auto;'>
+          <form action="vipcheck.php" method="POST" style="width:100%;">
+            <legend>欲預約的車位：
+              <?php
+                if(isset($_GET['choose'])){
+                  echo $_GET['choose'];
+                  echo "<input type='hidden' name='SpaceID' value='".$_GET['choose']."'>";
+                }
+                else{
+                  echo "尚未選擇";
+                  echo "<input type='hidden' name='SpaceID' value='尚未選擇'>";
+                }
+              ?>
+            </legend>
+            <table style='width:100%;text-align:center;align:center;'>
+              <tr>
+                <td style="width: 50%;">預約車牌(僅大寫英文+數字)</td>
+                <td style="width: 50%;"><input required type="text" name="License"  id="LicenseInput"/></td>
+              </tr>              
+              <tr>
+                <td style="width: 50%;">起始時間：</td>
+                <td style="width: 50%;"><input required type="datetime-local" name="StartTime"/></td>
+              </tr>
+              <tr>
+                <td style="width: 50%;">結束時間：</td>
+                <td style="width: 50%;"><input required type="datetime-local" name="EndTime"/></td>
+              </tr>
+              <tr>
+                <td colspan="2"><input type="submit" name="vipsubmit" value="預約"  style="width: 50%;" class="login_btn"/></td>
+              </tr>
+            </table>
+          </form>
+        </div>  
+      </div>
+     </div>
+    </section>
+    <script>
+      document.getElementById("LicenseInput").onkeyup = function() {
+        this.value = this.value.replace(/[^A-Z0-9]/g, "").substr(0, 7);//限定大寫英文+數字與7碼
+      };
+    </script>
+    <!-- 預約表單結束 -->
     <!-- 各停車場目前使用狀態開始 -->
     <br>
     <section class="service-provide-area">
@@ -275,112 +352,7 @@
      </div>
     </section>
     <!-- 各停車場目前使用狀態結束 -->
-    
-    <!-- 各停車場目前使用狀態開始 -->
-    <br>
-    <section class="service-provide-area">
-     <div class="container">
-      <div class="row">
-        <table width="100%" style="border: 1px solid red;">
-          <thead>
-            <tr>
-              <th colspan="20" style="border: 1px solid red;text-align:center;">A停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-            for($i=0;$i<5;$i++){
-              echo "<tr>";
-              for($j=0;$j<20;$j++){
-                if($ParkASpaceStatus[$i*20+$j]==0)
-                  $BgColor="green";
-                  else if($ParkASpaceStatus[$i*20+$j]==1)
-                    $BgColor="red";
-                  else if($ParkASpaceStatus[$i*20+$j]==2)//暫停使用
-                    $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
-              }
-              echo "</tr>";
-            }
-          ?>
-          </tbody>
-        </table>
-        <table width="100%" style="border: 1px solid red;">
-          <thead>
-            <tr>
-              <th colspan="20" style="border: 1px solid red;text-align:center;">B停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-            for($i=0;$i<5;$i++){
-              echo "<tr>";
-              for($j=0;$j<20;$j++){
-                if($ParkBSpaceStatus[$i*20+$j]==0)
-                  $BgColor="green";
-                  else if($ParkBSpaceStatus[$i*20+$j]==1)
-                    $BgColor="red";
-                  else if($ParkBSpaceStatus[$i*20+$j]==2)//暫停使用
-                    $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
-              }
-              echo "</tr>";
-            }
-          ?>
-          </tbody>
-        </table>
-        <table width="100%" style="border: 1px solid red;">
-          <thead>
-            <tr>
-              <th colspan="20" style="border: 1px solid red;text-align:center;">C停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-            for($i=0;$i<5;$i++){
-              echo "<tr>";
-              for($j=0;$j<20;$j++){
-                if($ParkCSpaceStatus[$i*20+$j]==0)
-                  $BgColor="green";
-                  else if($ParkCSpaceStatus[$i*20+$j]==1)
-                    $BgColor="red";
-                  else if($ParkCSpaceStatus[$i*20+$j]==2)//暫停使用
-                    $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
-              }
-              echo "</tr>";
-            }
-          ?>
-          </tbody>
-        </table>
-        <table width="100%" style="border: 1px solid red;">
-          <thead>
-            <tr>
-              <th colspan="20" style="border: 1px solid red;text-align:center;">D停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-            for($i=0;$i<5;$i++){
-              echo "<tr>";
-              for($j=0;$j<20;$j++){
-                if($ParkDSpaceStatus[$i*20+$j]==0)
-                  $BgColor="green";
-                  else if($ParkDSpaceStatus[$i*20+$j]==1)
-                    $BgColor="red";
-                  else if($ParkDSpaceStatus[$i*20+$j]==2)//暫停使用
-                    $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
-              }
-              echo "</tr>";
-            }
-          ?>
-          </tbody>
-        </table>
-      </div>
-     </div>
-    </section>
-    <!-- 各停車場目前使用狀態結束 -->
+
     <!-- 台積電簡介開始 -->
     <section class="analysis-area section-padding">
      <div class="container">
