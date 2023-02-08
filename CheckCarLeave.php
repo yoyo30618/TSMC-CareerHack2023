@@ -53,14 +53,10 @@
 					if(in_array($file_ext,$extensions)=== false){
 					$errors[]="extension not allowed, please choose a JPEG or PNG file.";
 					}
-					if($file_size > 2097152) {
-					$errors[]='File size must be excately 2 MB';
-					}
 					if(empty($errors)==true) {
-					move_uploaded_file($file_tmp,"LeaveImage/".$NowFileName);
-					echo "Success";
+						move_uploaded_file($file_tmp,"LeaveImage/".$NowFileName);
 					}else{
-					print_r($errors);
+						print_r($errors);
 					}
 				}
 				/*將檔案存放置伺服器成功*/

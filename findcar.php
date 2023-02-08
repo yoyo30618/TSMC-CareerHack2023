@@ -175,11 +175,11 @@
                 echo "</tr>";
               }
               if($Find==0){//沒找到
-                echo "<td colspan='4' style='border: 1px solid red;'>此車牌目前尚未無停車紀錄</td>";
+                echo "<td colspan='5' style='border: 1px solid red;'>此車牌目前尚未無停車紀錄</td>";
               }
             }
             else{
-              echo "<td colspan='4' style='border: 1px solid red;'>此車牌目前尚未無停車紀錄</td>";
+              echo "<td colspan='5' style='border: 1px solid red;'>此車牌目前尚未無停車紀錄</td>";
             }
           ?>
             </tr>

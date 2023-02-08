@@ -198,6 +198,8 @@
                             echo "<td colspan='6' style='border: 1px solid red;'>查找不到該姓名/車牌相關紀錄</td>";
                           echo "</tr>";
                         }
+                        echo "</form>";
+                        echo "<form method='post' action='info.php'>";
                         echo "<tr>";
                         echo "<td style='border: 1px solid red;width: 16.6%;'><input required type='text' placeholder='英文姓名' name='AddName' class='login_btn'/></td>";
                         echo "<td style='border: 1px solid red;width: 16.6%;'><input required type='text' placeholder='中文姓名' name='AddCname' class='login_btn'/></td>";
