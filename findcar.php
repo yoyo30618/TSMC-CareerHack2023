@@ -149,14 +149,14 @@
          <table width="100%" style="border: 1px solid red;">
           <thead>
             <tr>
-              <th style="border: 1px solid red;width: 25%;">車牌</th>
-              <th style="border: 1px solid red;width: 25%;">停放車格</th>
-              <th style="border: 1px solid red;width: 25%;">入場時間</th>
-              <th style="border: 1px solid red;width: 25%;">停放時長</th>
+              <th style="border: 1px solid red;width: 20%;">車牌</th>
+              <th style="border: 1px solid red;width: 20%;">停放車格</th>
+              <th style="border: 1px solid red;width: 20%;">停放照片</th>
+              <th style="border: 1px solid red;width: 20%;">入場時間</th>
+              <th style="border: 1px solid red;width: 20%;">停放時長</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
           <?php
             if(isset($_POST['License'])){
               $sql_query_FindCar="SELECT * FROM `parkingrecord` WHERE `License`='".$_POST['License']."' AND `EnterTime`<'". date( "Y-m-d H:i:s")."' AND `LeaveTime` IS NULL";
@@ -164,17 +164,19 @@
               $Find=0;
               while($row=mysqli_fetch_array($FindCar_result)){
                 $Find=1;
-                echo "<td style='border: 1px solid red;width: 25%;'>".$row['License']."</td>";
-                echo "<td style='border: 1px solid red;width: 25%;'>".$row['SpaceID']."</td>";
-                echo "<td style='border: 1px solid red;width: 25%;'>".$row['EnterTime']."</td>";
+                echo "<tr>";
+                echo "<td style='border: 1px solid red;width: 20%;'>".$row['License']."</td>";
+                echo "<td style='border: 1px solid red;width: 20%;'>".$row['SpaceID']."</td>";
+                echo "<td style='border: 1px solid red;width: 20%;'><a href='ParkedImage/".$row['ParkPhotoPath']."' target='_blank'>".$row['ParkPhotoPath']."</a></td>";
+                echo "<td style='border: 1px solid red;width: 20%;'>".$row['EnterTime']."</td>";
                 $diff = date_diff(new DateTime(date( "Y-m-d H:i:s")), new DateTime($row['EnterTime']));
-                echo "<td style='border: 1px solid red;width: 25%;'>".$diff->format("%d 天 %h 小時 %i 分鐘 %s 秒")."</td>";
+                echo "<td style='border: 1px solid red;width: 20%;'>".$diff->format("%d 天 %h 小時 %i 分鐘 %s 秒")."</td>";
 
+                echo "</tr>";
               }
               if($Find==0){//沒找到
                 echo "<td colspan='4' style='border: 1px solid red;'>此車牌目前尚未無停車紀錄</td>";
               }
-              echo "</tr>";
             }
             else{
               echo "<td colspan='4' style='border: 1px solid red;'>此車牌目前尚未無停車紀錄</td>";

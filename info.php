@@ -269,9 +269,9 @@
                     echo "<tr>";
                     echo "<td style='border: 1px solid red;width: 12.5%;'>".$row['License']."</td>";
                     echo "<td style='border: 1px solid red;width: 12.5%;'>".$row['SpaceID']."</td>";
-                    echo "<td style='border: 1px solid red;width: 12.5%;'>".$row['EnterPhotoPath']."</td>";
-                    echo "<td style='border: 1px solid red;width: 12.5%;'>".$row['ParkPhotoPath']."</td>";
-                    echo "<td style='border: 1px solid red;width: 12.5%;'>".$row['LeavePhotoPath']."</td>";
+                    echo "<td style='border: 1px solid red;width: 12.5%;'><a href='EnterImage/".$row['EnterPhotoPath']."' target='_blank'>".$row['EnterPhotoPath']."</a></td>";
+                    echo "<td style='border: 1px solid red;width: 12.5%;'><a href='ParkedImage/".$row['ParkPhotoPath']."' target='_blank'>".$row['ParkPhotoPath']."</a></td>";
+                    echo "<td style='border: 1px solid red;width: 12.5%;'><a href='LeaveImage/".$row['LeavePhotoPath']."' target='_blank'>".$row['LeavePhotoPath']."</a></td>";
                     echo "<td style='border: 1px solid red;width: 12.5%;'>".$row['EnterTime']."</td>";
                     echo "<td style='border: 1px solid red;width: 12.5%;'>".$row['LeaveTime']."</td>";
                     if($row['LeaveTime']==null){
