@@ -5,8 +5,10 @@
 	{
 		if(isset($_POST['LicenseLeaveCode'])|| !empty($_FILES['LicenseLeavePhoto']['name'])){
 			include_once ("conn_mysql.php");
+			$Isphoto=False;
 			if(!empty($_FILES['LicenseLeavePhoto']['name'])){//如果有拿到照片，取得車牌
 				$License=exec("python test.py 5");
+				$Isphoto=true;
 			}
 			else{//否則抓手動輸入的車牌
 				$License=$_POST['LicenseLeaveCode'];
@@ -62,7 +64,10 @@
 				/*將檔案存放置伺服器成功*/
 				
 				//找到該筆，確認離場
-				$sql_query_LicenseLeave="UPDATE `parkingrecord` SET `LeaveTime`='".date( "Y-m-d H:i:s")."',`IsIn`='0',`LeavePhotoPath`='".$NowFileName."' WHERE `_ID`='".$LeavingID."'";
+				if(!$Isphoto)
+					$sql_query_LicenseLeave="UPDATE `parkingrecord` SET `LeaveTime`='".date( "Y-m-d H:i:s")."',`IsIn`='0',`LeavePhotoPath`='手動輸入車牌無照片' WHERE `_ID`='".$LeavingID."'";
+				else
+					$sql_query_LicenseLeave="UPDATE `parkingrecord` SET `LeaveTime`='".date( "Y-m-d H:i:s")."',`IsIn`='0',`LeavePhotoPath`='".$NowFileName."' WHERE `_ID`='".$LeavingID."'";
 				$LicenseLeave_result=mysqli_query($db_link,$sql_query_LicenseLeave) or die("查詢失敗");//查詢帳密
 				echo"<script  language=\"JavaScript\">alert('已成功設定車輛離場');location.href=\"admin.php\";</script>";
 			}

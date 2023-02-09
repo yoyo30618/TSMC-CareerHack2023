@@ -5,13 +5,15 @@
 	{
 		if(isset($_POST['LicenseParkedCode'])|| !empty($_FILES['LicenseParkedPhoto']['name'])){
 			include_once ("conn_mysql.php");
+			$Isphoto=False;
 			if(!empty($_FILES['LicenseParkedPhoto']['name'])){//如果有拿到照片，取得車牌
 				$License=exec("python test.py 5");
+				$Isphoto=true;
 			}
 			else{//否則抓手動輸入的車牌
 				$License=$_POST['LicenseParkedCode'];
 			}
-			//先找有沒有 入場後無出場的紀錄，代表現在要停
+			//先找有沒有 入場後無出場的紀錄，代表現在要停的那筆ID
 			$sql_query_CheckEnter="SELECT * FROM `parkingrecord` WHERE `License`='".$License."' AND `LeaveTime` IS null ORDER BY `EnterTime` DESC";
 			$CheckEnter_result=mysqli_query($db_link,$sql_query_CheckEnter) or die("查詢失敗");//查詢帳密
 			$Fd=0;
@@ -29,6 +31,9 @@
 				$SpaceID=$_POST['SpaceID'];
 				$Park=$SpaceID[0];
 				$SpaceNum = intval(substr($SpaceID, 1));
+				
+
+
 				if($Park!='A'&&$Park!='B'&&$Park!='C'&&$Park!='D'){
 					echo"<script  language=\"JavaScript\">alert('停車格不合法，請檢查');location.href=\"admin.php\";</script>";
 				}
@@ -83,8 +88,11 @@
 						$sql_query_SetPark="UPDATE `parkstatusc` SET `IsParked`='1' WHERE `SpaceID`='".$SpaceNum."'";
 					if($Park=="D")
 						$sql_query_SetPark="UPDATE `parkstatusd` SET `IsParked`='1' WHERE `SpaceID`='".$SpaceNum."'";
-					$SetPark_result=mysqli_query($db_link,$sql_query_SetPark) or die("查詢失敗");//查詢帳密
-					$sql_query_LicenseLeave="UPDATE `parkingrecord` SET `SpaceID`='".$SpaceID."',`ParkPhotoPath`='".$NowFileName."' WHERE `_ID`='".$ParkingID."'";
+					$SetPark_result=mysqli_query($db_link,$sql_query_SetPark) or die("查詢失敗");
+					if(!$Isphoto)
+						$sql_query_LicenseLeave="UPDATE `parkingrecord` SET `SpaceID`='".$SpaceID."',`ParkPhotoPath`='手動輸入車牌無照片' WHERE `_ID`='".$ParkingID."'";
+					else
+						$sql_query_LicenseLeave="UPDATE `parkingrecord` SET `SpaceID`='".$SpaceID."',`ParkPhotoPath`='".$NowFileName."' WHERE `_ID`='".$ParkingID."'";
 					$LicenseLeave_result=mysqli_query($db_link,$sql_query_LicenseLeave) or die("查詢失敗");//查詢帳密
 					echo"<script  language=\"JavaScript\">alert('已成功設定車輛停妥');location.href=\"admin.php\";</script>";	
 				}

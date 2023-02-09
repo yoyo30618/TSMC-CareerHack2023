@@ -191,197 +191,130 @@
     <!-- 上方背景橫幅開始-->
     <section class="breadcrumb-area">
      <div class="breadcrumb-content text-center">
-      <h1>停車場狀態</h1>
+      <h1>車位管理</h1>
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="index.php">首頁</a></li>
-        <li class="breadcrumb-item active" aria-current="page">停車場狀態</li>
+        <li class="breadcrumb-item active" aria-current="page">車位管理</li>
        </ol>
       </nav>
      </div>
     </section>
     <!-- 上方背景橫幅結束-->
-    <!-- 各停車場目前使用狀態開始 -->
-    <br>
-    <section class="service-provide-area">
-     <div class="container">
-      <div class="row">
-       <div class="col-md-12">
-        <div class="section-title">
-         <h2>各停車場目前使用狀態</h2>
-         <div class="section-line">
-          <span></span>
-         </div>
+    <!-- 車位是否可用開始 -->
+    <form method="post" action="SpaceChg.php">
+      <section class="service-provide-area">
+        <div class="container">
+          <div class="row">
+            <table width="100%" style="border: 1px solid red;">
+              <thead>
+                <tr>
+                  <th colspan="20" style="border: 1px solid red;text-align:center;">A停車場，點擊變更車位可否使用<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
+                </tr>
+              </thead>
+              <tbody>
+              <?php
+                for($i=0;$i<5;$i++){
+                  echo "<tr>";
+                  for($j=0;$j<20;$j++){
+                    if($ParkASpaceStatus[$i*20+$j]==0)
+                      $BgColor="green";
+                    else if($ParkASpaceStatus[$i*20+$j]==1)
+                      $BgColor="red";
+                    else if($ParkASpaceStatus[$i*20+$j]==2)//暫停使用
+                      $BgColor="orange";
+                      echo "<td  style='text-align:center'>";
+                        echo "<input  type='submit' style='background-color:$BgColor;' name='choose' value='A".$i*20+$j."' class='login_btn'/>";
+                      echo "</td>";
+                  }
+                  echo "</tr>";
+                }
+              ?>
+              </tbody>
+            </table>
+            <table width="100%" style="border: 1px solid red;">
+              <thead>
+                <tr>
+                  <th colspan="20" style="border: 1px solid red;text-align:center;">B停車場，點擊變更車位可否使用<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
+                </tr>
+              </thead>
+              <tbody>
+              <?php
+                for($i=0;$i<5;$i++){
+                  echo "<tr>";
+                  for($j=0;$j<20;$j++){
+                    if($ParkBSpaceStatus[$i*20+$j]==0)
+                      $BgColor="green";
+                    else if($ParkBSpaceStatus[$i*20+$j]==1)
+                      $BgColor="red";
+                    else if($ParkBSpaceStatus[$i*20+$j]==2)//暫停使用
+                      $BgColor="orange";
+                    echo "<td  style='text-align:center'>";
+                      echo "<input  type='submit' style='background-color:$BgColor;' name='choose' value='B".$i*20+$j."' class='login_btn'/>";
+                    echo "</td>";
+                  }
+                  echo "</tr>";
+                }
+              ?>
+              </tbody>
+            </table>
+            <table width="100%" style="border: 1px solid red;">
+              <thead>
+                <tr>
+                  <th colspan="20" style="border: 1px solid red;text-align:center;">C停車場，點擊變更車位可否使用<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
+                </tr>
+              </thead>
+              <tbody>
+              <?php
+                for($i=0;$i<5;$i++){
+                  echo "<tr>";
+                  for($j=0;$j<20;$j++){
+                    if($ParkCSpaceStatus[$i*20+$j]==0)
+                      $BgColor="green";
+                    else if($ParkCSpaceStatus[$i*20+$j]==1)
+                      $BgColor="red";
+                    else if($ParkCSpaceStatus[$i*20+$j]==2)//暫停使用
+                      $BgColor="orange";
+                      echo "<td  style='text-align:center'>";
+                        echo "<input  type='submit' style='background-color:$BgColor;' name='choose' value='C".$i*20+$j."' class='login_btn'/>";
+                      echo "</td>";
+                  }
+                  echo "</tr>";
+                }
+              ?>
+              </tbody>
+            </table>
+            <table width="100%" style="border: 1px solid red;">
+              <thead>
+                <tr>
+                  <th colspan="20" style="border: 1px solid red;text-align:center;">D停車場，點擊變更車位可否使用<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
+                </tr>
+              </thead>
+              <tbody>
+              <?php
+                for($i=0;$i<5;$i++){
+                  echo "<tr>";
+                  for($j=0;$j<20;$j++){
+                    if($ParkDSpaceStatus[$i*20+$j]==0)
+                      $BgColor="green";
+                      else if($ParkDSpaceStatus[$i*20+$j]==1)
+                        $BgColor="red";
+                      else if($ParkDSpaceStatus[$i*20+$j]==2)//暫停使用
+                        $BgColor="orange";
+                        echo "<td  style='text-align:center'>";
+                          echo "<input  type='submit' style='background-color:$BgColor;' name='choose' value='D".$i*20+$j."' class='login_btn'/>";
+                        echo "</td>";
+                  }
+                  echo "</tr>";
+                }
+              ?>
+              </tbody>
+            </table>
+          </div>
         </div>
-       </div>
-      </div>
-      <div class="row">
-       <div class="col-md-12">
-        <div class="service-provide-block">
-         <div class="service-provide-single">
-          <img src="img/projects/1.jpg" alt="img" />
-          <h4><a>A停車場</a></h4>
-          <p>台積電F12P1-張忠謀大樓</p>
-          <div class="counter-content-single">
-            <h4>停車場可用空位</h4>
-            <h2>  
-              <?php
-                echo "<span class='timer' data-from='0' data-to='$ParkASpace' data-speed='5000' data-refresh-interval='50'></span>";
-              ?>
-            </h2>
-          </div>
-         </div> 
-         <div class="service-provide-single">
-          <img src="img/projects/2.jpg" alt="img" />
-          <h4><a>B停車場</a></h4>
-          <p>台積電五廠</p>
-          <div class="counter-content-single">
-            <h4>停車場可用空位</h4>
-            <h2>  
-              <?php
-                echo "<span class='timer' data-from='0' data-to='$ParkBSpace' data-speed='5000' data-refresh-interval='50'></span>";
-              ?>
-            </h2>
-          </div>
-         </div>
-         <div class="service-provide-single">
-          <img src="img/projects/3.jpg" alt="img" />
-          <h4><a>C停車場</a></h4>
-          <p>台積電十二廠P6</p>
-          <div class="counter-content-single">
-            <h4>停車場可用空位</h4>
-            <h2>  
-              <?php
-                echo "<span class='timer' data-from='0' data-to='$ParkCSpace' data-speed='5000' data-refresh-interval='50'></span>";
-              ?>
-            </h2>
-          </div>
-         </div>
-         <div class="service-provide-single">
-          <img src="img/projects/4.jpg" alt="img" />
-          <h4><a>D停車場</a></h4>
-          <p>台積電十二廠P4,5</p>
-          <div class="counter-content-single">
-            <h4>停車場可用空位</h4>
-            <h2>  
-              <?php
-                echo "<span class='timer' data-from='0' data-to='$ParkDSpace' data-speed='5000' data-refresh-interval='50'></span>";
-              ?>
-            </h2>
-          </div>
-         </div>
-        </div>
-       </div>
-      </div>
-     </div>
-    </section>
-    <!-- 各停車場目前使用狀態結束 -->
-    
-    <!-- 各停車場目前使用狀態開始 -->
-    <br>
-    <section class="service-provide-area">
-     <div class="container">
-      <div class="row">
-        <table width="100%" style="border: 1px solid red;">
-          <thead>
-            <tr>
-              <th colspan="20" style="border: 1px solid red;text-align:center;">A停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-            for($i=0;$i<5;$i++){
-              echo "<tr>";
-              for($j=0;$j<20;$j++){
-                if($ParkASpaceStatus[$i*20+$j]==0)
-                  $BgColor="green";
-                  else if($ParkASpaceStatus[$i*20+$j]==1)
-                    $BgColor="red";
-                  else if($ParkASpaceStatus[$i*20+$j]==2)//暫停使用
-                    $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
-              }
-              echo "</tr>";
-            }
-          ?>
-          </tbody>
-        </table>
-        <table width="100%" style="border: 1px solid red;">
-          <thead>
-            <tr>
-              <th colspan="20" style="border: 1px solid red;text-align:center;">B停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-            for($i=0;$i<5;$i++){
-              echo "<tr>";
-              for($j=0;$j<20;$j++){
-                if($ParkBSpaceStatus[$i*20+$j]==0)
-                  $BgColor="green";
-                  else if($ParkBSpaceStatus[$i*20+$j]==1)
-                    $BgColor="red";
-                  else if($ParkBSpaceStatus[$i*20+$j]==2)//暫停使用
-                    $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
-              }
-              echo "</tr>";
-            }
-          ?>
-          </tbody>
-        </table>
-        <table width="100%" style="border: 1px solid red;">
-          <thead>
-            <tr>
-              <th colspan="20" style="border: 1px solid red;text-align:center;">C停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-            for($i=0;$i<5;$i++){
-              echo "<tr>";
-              for($j=0;$j<20;$j++){
-                if($ParkCSpaceStatus[$i*20+$j]==0)
-                  $BgColor="green";
-                  else if($ParkCSpaceStatus[$i*20+$j]==1)
-                    $BgColor="red";
-                  else if($ParkCSpaceStatus[$i*20+$j]==2)//暫停使用
-                    $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
-              }
-              echo "</tr>";
-            }
-          ?>
-          </tbody>
-        </table>
-        <table width="100%" style="border: 1px solid red;">
-          <thead>
-            <tr>
-              <th colspan="20" style="border: 1px solid red;text-align:center;">D停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用)</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-            for($i=0;$i<5;$i++){
-              echo "<tr>";
-              for($j=0;$j<20;$j++){
-                if($ParkDSpaceStatus[$i*20+$j]==0)
-                  $BgColor="green";
-                  else if($ParkDSpaceStatus[$i*20+$j]==1)
-                    $BgColor="red";
-                  else if($ParkDSpaceStatus[$i*20+$j]==2)//暫停使用
-                    $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
-              }
-              echo "</tr>";
-            }
-          ?>
-          </tbody>
-        </table>
-      </div>
-     </div>
-    </section>
-    <!-- 各停車場目前使用狀態結束 -->
+      </section>
+    </form>
+    <!-- 車位是否可用結束 -->    
     <!-- 台積電簡介開始 -->
     <section class="analysis-area section-padding">
      <div class="container">

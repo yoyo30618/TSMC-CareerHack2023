@@ -30,11 +30,15 @@
 					// 若勾選7天內自動登入,則將其儲存到Cookie並設定保留7天
 					if (isset($_POST['remember'])) {
 						setcookie('TSMC_Account', $Account, time()+7*24*60*60);
+						setcookie('TSMC_Islogin', 1, time()+7*24*60*60);
 						setcookie('TSMC_Code', md5($Account.md5($Password)), time()+7*24*60*60);
+						setcookie('TSMC_Status', "管理員", time()+7*24*60*60);
 					}
 					else {
 						setcookie('TSMC_Account', $Account);
+						setcookie('TSMC_Islogin', 1);
 						setcookie('TSMC_Code', md5($Account.md5($Password)));
+						setcookie('TSMC_Status', "管理員");
 					}
 					echo"<script  language=\"JavaScript\">alert('登入成功');location.href=\"index.php\";</script>";
 					break;
@@ -43,7 +47,7 @@
 			else//密碼錯誤登入失敗
 				echo"<script  language=\"JavaScript\">alert('使用者名稱或密碼錯誤');location.href=\"login.php\";</script>";
 		}
-		if(!isset($_SESSION['TSMC_Islogin']))//都找不到代表沒帳號
+		if(!isset($_COOKIE['TSMC_Islogin']))//都找不到代表沒帳號
 			echo"<script  language=\"JavaScript\">alert('使用者名稱或密碼錯誤');location.href=\"login.php\";</script>";
 	}
 	else//不當路徑進入

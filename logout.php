@@ -5,6 +5,8 @@
 	//清除cookie
 	setcookie("TSMC_Account",'',time()-1);
 	setcookie("TSMC_Code",'',time()-1);
+	setcookie("TSMC_Islogin",'',time()-1);
+	setcookie("TSMC_Status",'',time()-1);
 	header("Location:index.php"); 
 	//確保重定向後,後續程式碼不會被執行 
 	exit;

@@ -70,13 +70,14 @@
             <li class="nav-item active"><a class="nav-link" href="index.php">首頁</a></li>
             <li class="nav-item"><a class="nav-link" href="parkingstatus.php">停車場狀態</a></li>
             <li class="nav-item"><a class="nav-link" href="findcar.php">尋找愛車</a></li>
-            <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP車位</a></li>
+            <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP位</a></li>
             <?php 
-              if (isset($_SESSION['TSMC_Islogin'])&&$_SESSION['TSMC_Islogin']=="1"){
-                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個人資料查詢</a></li>";
-                if(isset($_SESSION['TSMC_Status'])&&$_SESSION['TSMC_Status']=="管理員"){
+              if (isset($_COOKIE['TSMC_Islogin'])&&$_COOKIE['TSMC_Islogin']=="1"){
+                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個資查詢</a></li>";
+                if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
                   echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺管理</a></li>";
-                  echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單設定</a></li>";   
+                  echo "<li class='nav-item'><a class='nav-link' href='SpaceManage.php'>車位管理</a></li>";
+                  echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單</a></li>";   
                 }     
                 echo "<li class='nav-item'>";
                   echo "<div class='login-btn'>";
@@ -244,13 +245,13 @@
             <li class="nav-item active"><a class="nav-link" href="index.php">首頁</a></li>
             <li class="nav-item"><a class="nav-link" href="parkingstatus.php">停車場狀態</a></li>
             <li class="nav-item"><a class="nav-link" href="findcar.php">尋找愛車</a></li>
-            <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP車位</a></li>
+            <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP位</a></li>
             <?php 
-              if (isset($_SESSION['TSMC_Islogin'])&&$_SESSION['TSMC_Islogin']=="1"){
-                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個人資料查詢</a></li>";
-                if(isset($_SESSION['TSMC_Status'])&&$_SESSION['TSMC_Status']=="管理員"){
+              if (isset($_COOKIE['TSMC_Islogin'])&&$_COOKIE['TSMC_Islogin']=="1"){
+                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個資查詢</a></li>";
+                if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
                   echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺管理</a></li>";
-                  echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單設定</a></li>";   
+                  echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單</a></li>";   
                 }     
                 echo "<li class='nav-item'>";
                   echo "<a class='nav-link' href='logout.php'>登出</a>";

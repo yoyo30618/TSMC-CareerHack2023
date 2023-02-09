@@ -53,22 +53,31 @@
     while($row=mysqli_fetch_array($RecordCount_result)){
       $RecordCount=$row['res'];
     }
+
+
+    $ParkStauts=array();
+    for($i=0;$i<100;$i++)
+      $ParkStauts["A".$i]=0;
     /*查詢每一格各自狀態*/
     $Sql_query_parkstatusA="SELECT * FROM `parkstatusa`";
     $ParkstatusA_result=mysqli_query($db_link,$Sql_query_parkstatusA) or die("查詢失敗");//查詢帳密
     $ParkASpaceStatus=array();
     while($row=mysqli_fetch_array($ParkstatusA_result)){
-      if($row['IsUsed']==0)//位置不可用
+      if($row['IsUsed']==0){//位置不可用
         $ParkASpaceStatus[$row['SpaceID']]=2;
+        $ParkStauts["A".$row['SpaceID']]=2;
+      }
       else
-      $ParkASpaceStatus[$row['SpaceID']]=$row['IsParked'];
+        $ParkASpaceStatus[$row['SpaceID']]=$row['IsParked'];
     }
     $Sql_query_parkstatusB="SELECT * FROM `parkstatusb`";
     $ParkstatusB_result=mysqli_query($db_link,$Sql_query_parkstatusB) or die("查詢失敗");//查詢帳密
     $ParkBSpaceStatus=array();
     while($row=mysqli_fetch_array($ParkstatusB_result)){
-      if($row['IsUsed']==0)//位置不可用
-        $ParkBSpaceStatus[$row['SpaceID']]=2;
+      if($row['IsUsed']==0){//位置不可用
+        $ParkASpaceStatus[$row['SpaceID']]=2;
+        $ParkStauts["B".$row['SpaceID']]=2;
+      }
       else
       $ParkBSpaceStatus[$row['SpaceID']]=$row['IsParked'];
     }
@@ -76,8 +85,10 @@
     $ParkstatusC_result=mysqli_query($db_link,$Sql_query_parkstatusC) or die("查詢失敗");//查詢帳密
     $ParkCSpaceStatus=array();
     while($row=mysqli_fetch_array($ParkstatusC_result)){
-      if($row['IsUsed']==0)//位置不可用
-        $ParkCSpaceStatus[$row['SpaceID']]=2;
+      if($row['IsUsed']==0){//位置不可用
+        $ParkASpaceStatus[$row['SpaceID']]=2;
+        $ParkStauts["C".$row['SpaceID']]=2;
+      }
       else
       $ParkCSpaceStatus[$row['SpaceID']]=$row['IsParked'];
     }
@@ -85,10 +96,30 @@
     $ParkstatusD_result=mysqli_query($db_link,$Sql_query_parkstatusD) or die("查詢失敗");//查詢帳密
     $ParkDSpaceStatus=array();
     while($row=mysqli_fetch_array($ParkstatusD_result)){
-      if($row['IsUsed']==0)//位置不可用
-        $ParkDSpaceStatus[$row['SpaceID']]=2;
+      if($row['IsUsed']==0){//位置不可用
+        $ParkASpaceStatus[$row['SpaceID']]=2;
+        $ParkStauts["D".$row['SpaceID']]=2;
+      }
       else
-      $ParkDSpaceStatus[$row['SpaceID']]=$row['IsParked'];
+        $ParkDSpaceStatus[$row['SpaceID']]=$row['IsParked'];
+    }
+
+    /*檢查某時段預約狀態*/
+    if(isset($_POST['checktimesubmit'])){
+      if($_POST['StartTime']>$_POST['EndTime']){
+        echo"<script  language=\"JavaScript\">alert('時段選擇無效');location.href=\"vip.php\";</script>";
+		
+      }
+      $dt = new DateTime($_POST['StartTime']);
+			$formatted_StartTime = $dt->format("Y-m-d H:i:s");
+      $dt = new DateTime($_POST['EndTime']);
+			$formatted_EndTime = $dt->format("Y-m-d H:i:s");
+			$sql_query_checktime="SELECT * FROM `vip` WHERE (`StartTime`<'".$formatted_StartTime."' AND `EndTime`>'".$formatted_StartTime."') OR (`StartTime`<'".$formatted_EndTime."' AND `EndTime`>'".$formatted_EndTime."')";
+      $checktime_result=mysqli_query($db_link,$sql_query_checktime) or die("查詢失敗");//查詢帳密
+			while($row=mysqli_fetch_array($checktime_result)){
+        if($ParkStauts[$row['SpaceID']]==0)
+				  $ParkStauts[$row['SpaceID']]=1;
+			}
     }
   ?>
  <head>
@@ -157,13 +188,14 @@
             <li class="nav-item active"><a class="nav-link" href="index.php">首頁</a></li>
             <li class="nav-item"><a class="nav-link" href="parkingstatus.php">停車場狀態</a></li>
             <li class="nav-item"><a class="nav-link" href="findcar.php">尋找愛車</a></li>
-            <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP車位</a></li>
+            <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP位</a></li>
             <?php 
-              if (isset($_SESSION['TSMC_Islogin'])&&$_SESSION['TSMC_Islogin']=="1"){
-                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個人資料查詢</a></li>";
-                if(isset($_SESSION['TSMC_Status'])&&$_SESSION['TSMC_Status']=="管理員"){
+              if (isset($_COOKIE['TSMC_Islogin'])&&$_COOKIE['TSMC_Islogin']=="1"){
+                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個資查詢</a></li>";
+                if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
                   echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺管理</a></li>";
-                  echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單設定</a></li>";   
+                  echo "<li class='nav-item'><a class='nav-link' href='SpaceManage.php'>車位管理</a></li>";
+                  echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單</a></li>";   
                 }     
                 echo "<li class='nav-item'>";
                   echo "<div class='login-btn'>";
@@ -190,11 +222,11 @@
     <!-- 上方背景橫幅開始-->
     <section class="breadcrumb-area">
      <div class="breadcrumb-content text-center">
-      <h1>預約VIP車位</h1>
+      <h1>預約VIP位</h1>
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="index.php">首頁</a></li>
-        <li class="breadcrumb-item active" aria-current="page">預約VIP車位</li>
+        <li class="breadcrumb-item active" aria-current="page">預約VIP位</li>
        </ol>
       </nav>
      </div>
@@ -205,65 +237,20 @@
     <section class="service-provide-area">
      <div class="container">
       <div class="row">
-        <table width="100%" style="border: 1px solid red;">
-          <thead>
-            <tr>
-              <th colspan="20" style="border: 1px solid red;text-align:center;">*VIP車位目前僅供A停車場預約*<br>A停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用/藍色代表目前選中)</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-            for($i=0;$i<5;$i++){
-              echo "<tr>";
-              for($j=0;$j<20;$j++){
-                if(isset($_GET['choose'])&&$_GET['choose']=="A".$i*20+$j)
-                  echo "<td bgcolor='blue' style='text-align:center'><a style='color:white'href='vip.php?choose=A".$i*20+$j."'>".$i*20+$j."</a></td>";
-                else
-                  echo "<td bgcolor='green' style='text-align:center'><a style='color:white'href='vip.php?choose=A".$i*20+$j."'>".$i*20+$j."</a></td>";
-              }
-              echo "</tr>";
-            }
-          ?>
-          </tbody>
-        </table>
-      </div>
-     </div>
-    </section>
-    <!-- 各停車場目前使用狀態結束 -->
-    <!-- 預約表單開始 -->
-    <section class="service-provide-area">
-     <div class="container">
-      <div class="row">
-        <h2 style="width:100%;color:red;text-align:center">請先於上方選擇欲預約之車位</h2>
-        <div style='width:100%;text-align:center;margin:0 auto;'>
-          <form action="vipcheck.php" method="POST" style="width:100%;">
-            <legend>欲預約的車位：
-              <?php
-                if(isset($_GET['choose'])){
-                  echo $_GET['choose'];
-                  echo "<input type='hidden' name='SpaceID' value='".$_GET['choose']."'>";
-                }
-                else{
-                  echo "尚未選擇";
-                  echo "<input type='hidden' name='SpaceID' value='尚未選擇'>";
-                }
-              ?>
-            </legend>
-            <table style='width:100%;text-align:center;align:center;'>
-              <tr>
-                <td style="width: 50%;">預約車牌(僅大寫英文+數字)</td>
-                <td style="width: 50%;"><input required type="text" name="License"  id="LicenseInput"/></td>
-              </tr>              
+      <div style='width:100%;text-align:center;margin:0 auto;'>
+          <form action="vip.php" method="POST" style="width:100%;">
+            <legend>請先選擇欲預約之時段</legend>
+            <table style='width:100%;text-align:center;align:center;'>             
               <tr>
                 <td style="width: 50%;">起始時間：</td>
-                <td style="width: 50%;"><input required type="datetime-local" name="StartTime"/></td>
+                <td style="width: 50%;"><input required type="datetime-local" name="StartTime" <?php if(isset($_POST["StartTime"])) echo "value='".$_POST["StartTime"]."'";?>/></td>
               </tr>
               <tr>
                 <td style="width: 50%;">結束時間：</td>
-                <td style="width: 50%;"><input required type="datetime-local" name="EndTime"/></td>
+                <td style="width: 50%;"><input required type="datetime-local" name="EndTime" <?php if(isset($_POST["EndTime"])) echo "value='".$_POST["EndTime"]."'";?>/></td>
               </tr>
               <tr>
-                <td colspan="2"><input type="submit" name="vipsubmit" value="預約"  style="width: 50%;" class="login_btn"/></td>
+                <td colspan="2"><input type="submit" name="checktimesubmit" value="查詢時段"  style="width: 50%;" class="login_btn"/></td>
               </tr>
             </table>
           </form>
@@ -271,6 +258,88 @@
       </div>
      </div>
     </section>
+    <!-- 各停車場目前使用狀態結束 -->
+    <!-- 預約表單開始 -->
+    <?php
+      if(isset($_POST['checktimesubmit'])){
+    ?>
+      <section class="service-provide-area">
+        <div class="container">
+          <div class="row">
+            <h2 style="width:100%;color:red;text-align:center">
+              <?php
+                if(isset($_POST['StartTime']))
+                  echo "目前選定時段<br>".$_POST['StartTime']."~".$_POST['EndTime'];
+                else
+                  echo "請先於上方選擇欲預約之時段";
+              ?>
+            </h2>
+            <table width="100%" style="border: 1px solid red;">
+              <thead>
+                <tr>
+                  <th colspan="20" style="border: 1px solid red;text-align:center;">*VIP車位目前僅供A停車場預約*<br>A停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用/藍色代表目前選中)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <form method="post" action="vip.php">
+                  <input type="hidden" name="checktimesubmit" value="1">
+                  <input type="hidden" name="StartTime" value="<?php echo $_POST['StartTime'];?>">
+                  <input type="hidden" name="EndTime" value="<?php echo $_POST['EndTime'];?>">
+                  <?php
+                    for($i=0;$i<5;$i++){
+                      echo "<tr>";
+                      for($j=0;$j<20;$j++){
+                        if($ParkStauts["A".$i*20+$j]==1){
+                          echo "<td  style='text-align:center'>";
+                          echo "<input disabled type='submit' style='background-color:red;' name='choose' value='A".$i*20+$j."' class='login_btn'/>";
+                          echo "</td>";
+                        }else if(isset($_POST['choose'])&&$_POST['choose']=="A".$i*20+$j){
+                          echo "<td  style='text-align:center'>";
+                          echo "<input type='submit' style='background-color:blue;' name='choose' value='A".$i*20+$j."' class='login_btn'/>";
+                          echo "</td>";
+                        }
+                        else if($ParkStauts["A".$i*20+$j]==2){
+                          echo "<td style='text-align:center'>";
+                          echo "<input disabled type='submit' style='background-color:orange;' name='choose' value='A".$i*20+$j."' class='login_btn'/>";
+                          echo "</td>";
+                        }
+                        else{
+                          echo "<td style='text-align:center'>";
+                          echo "<input type='submit' style='background-color:green;' name='choose' value='A".$i*20+$j."' class='login_btn'/>";
+                          echo "</td>";
+                        }
+                      }
+                      echo "</tr>";
+                    }
+                  ?>
+                </form> 
+              <?php 
+                if(isset($_POST['choose'])){
+              ?>
+                <form method="post" action="vipcheck.php">
+                  <input type="hidden" name="checktimesubmit" value="1">
+                  <input type="hidden" name="StartTime" value="<?php echo $_POST['StartTime'];?>">
+                  <input type="hidden" name="EndTime" value="<?php echo $_POST['EndTime'];?>">
+                  <input type="hidden" name="SpaceID" value="<?php echo $_POST['choose'];?>">
+                  <tr>
+                    <td colspan="10" style="text-align:center;">預約車牌(僅大寫英文+數字)</td>
+                    <td colspan="10" style="text-align:center;"><input required type="text" name="License"  id="LicenseInput"/></td>
+                  </tr>
+                  <tr>
+                    <td colspan="20" style="text-align:center"><input type="submit" name="vipsubmit" value="預約VIP位"  style="width: 50%;" class="login_btn"/></td>
+                  </tr>
+                </form>
+              <?php
+                }
+              ?>
+              </tbody>
+            </table> 
+          </div>
+        </div>
+      </section>
+    <?php
+      }
+    ?>
     <script>
       document.getElementById("LicenseInput").onkeyup = function() {
         this.value = this.value.replace(/[^A-Z0-9]/g, "").substr(0, 7);//限定大寫英文+數字與7碼
@@ -516,13 +585,13 @@
             <li class="nav-item active"><a class="nav-link" href="index.php">首頁</a></li>
             <li class="nav-item"><a class="nav-link" href="parkingstatus.php">停車場狀態</a></li>
             <li class="nav-item"><a class="nav-link" href="findcar.php">尋找愛車</a></li>
-            <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP車位</a></li>
+            <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP位</a></li>
             <?php 
-              if (isset($_SESSION['TSMC_Islogin'])&&$_SESSION['TSMC_Islogin']=="1"){
-                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個人資料查詢</a></li>";
-                if(isset($_SESSION['TSMC_Status'])&&$_SESSION['TSMC_Status']=="管理員"){
+              if (isset($_COOKIE['TSMC_Islogin'])&&$_COOKIE['TSMC_Islogin']=="1"){
+                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個資查詢</a></li>";
+                if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
                   echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺管理</a></li>";
-                  echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單設定</a></li>";   
+                  echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單</a></li>";   
                 }     
                 echo "<li class='nav-item'>";
                   echo "<a class='nav-link' href='logout.php'>登出</a>";

@@ -2,7 +2,7 @@
 <html lang="zh-TW">
   <?php
     session_start();//開啟session
-    if(isset($_SESSION["TSMC_Islogin"])==false) {      
+    if(isset($_COOKIE["TSMC_Islogin"])==false) {      
 			echo"<script  language=\"JavaScript\">alert('請先登入');location.href=\"login.php\";</script>";
     }
     include_once ("conn_mysql.php");
@@ -95,13 +95,14 @@
             <li class="nav-item active"><a class="nav-link" href="index.php">首頁</a></li>
             <li class="nav-item"><a class="nav-link" href="parkingstatus.php">停車場狀態</a></li>
             <li class="nav-item"><a class="nav-link" href="findcar.php">尋找愛車</a></li>
-            <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP車位</a></li>
+            <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP位</a></li>
             <?php 
-              if (isset($_SESSION['TSMC_Islogin'])&&$_SESSION['TSMC_Islogin']=="1"){
-                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個人資料查詢</a></li>";
-                if(isset($_SESSION['TSMC_Status'])&&$_SESSION['TSMC_Status']=="管理員"){
+              if (isset($_COOKIE['TSMC_Islogin'])&&$_COOKIE['TSMC_Islogin']=="1"){
+                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個資查詢</a></li>";
+                if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
                   echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺管理</a></li>";
-                  echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單設定</a></li>";   
+                  echo "<li class='nav-item'><a class='nav-link' href='SpaceManage.php'>車位管理</a></li>";
+                  echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單</a></li>";   
                 }     
                 echo "<li class='nav-item'>";
                   echo "<div class='login-btn'>";
@@ -128,11 +129,11 @@
     <!-- 上方背景橫幅開始-->
     <section class="breadcrumb-area">
      <div class="breadcrumb-content text-center">
-      <h1>個人資料查詢</h1>
+      <h1>個資查詢</h1>
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="index.php">首頁</a></li>
-        <li class="breadcrumb-item active" aria-current="page">個人資料查詢</li>
+        <li class="breadcrumb-item active" aria-current="page">個資查詢</li>
        </ol>
       </nav>
      </div>
@@ -201,12 +202,12 @@
                         echo "</form>";
                         echo "<form method='post' action='info.php'>";
                         echo "<tr>";
-                        echo "<td style='border: 1px solid red;width: 16.6%;'><input required type='text' placeholder='英文姓名' name='AddName' class='login_btn'/></td>";
-                        echo "<td style='border: 1px solid red;width: 16.6%;'><input required type='text' placeholder='中文姓名' name='AddCname' class='login_btn'/></td>";
-                        echo "<td style='border: 1px solid red;width: 16.6%;'><input required type='text' placeholder='部門' name='AddDepartment' class='login_btn'/></td>";
-                        echo "<td style='border: 1px solid red;width: 16.6%;'><input required type='text' placeholder='職稱' name='AddJob' class='login_btn'/></td>";
-                        echo "<td style='border: 1px solid red;width: 16.6%;'><input required type='text' placeholder='車牌' name='AddLicense' class='login_btn' id='LicenseInput'/></td>";
-                        echo "<td style='border: 1px solid red;width: 16.6%;'><input required type='submit' name='AddInfo' value='新增' class='login_btn'/></td>";
+                          echo "<td style='border: 1px solid red;width: 16.6%;'><input required type='text' placeholder='英文姓名' name='AddName' class='login_btn'/></td>";
+                          echo "<td style='border: 1px solid red;width: 16.6%;'><input required type='text' placeholder='中文姓名' name='AddCname' class='login_btn'/></td>";
+                          echo "<td style='border: 1px solid red;width: 16.6%;'><input required type='text' placeholder='部門' name='AddDepartment' class='login_btn'/></td>";
+                          echo "<td style='border: 1px solid red;width: 16.6%;'><input required type='text' placeholder='職稱' name='AddJob' class='login_btn'/></td>";
+                          echo "<td style='border: 1px solid red;width: 16.6%;'><input required type='text' placeholder='車牌' name='AddLicense' class='login_btn' id='LicenseInput'/></td>";
+                          echo "<td style='border: 1px solid red;width: 16.6%;'><input required type='submit' name='AddInfo' value='新增' class='login_btn'/></td>";
                         echo "</tr>";
                       ?>
                     </form>
@@ -263,7 +264,7 @@
                 <tr>
               <?php
                 if(isset($_POST['License'])){
-                  $sql_query_FindCar="SELECT * FROM `parkingrecord` WHERE `License`='".$_POST['License']."'";
+                  $sql_query_FindCar="SELECT * FROM `parkingrecord` WHERE `License` like'%".$_POST['License']."%'";
                   $FindCar_result=mysqli_query($db_link,$sql_query_FindCar) or die("查詢失敗");
                   $Find=0;
                   while($row=mysqli_fetch_array($FindCar_result)){
@@ -271,13 +272,22 @@
                     echo "<tr>";
                     echo "<td style='border: 1px solid red;width: 12.5%;'>".$row['License']."</td>";
                     echo "<td style='border: 1px solid red;width: 12.5%;'>".$row['SpaceID']."</td>";
-                    echo "<td style='border: 1px solid red;width: 12.5%;'><a href='EnterImage/".$row['EnterPhotoPath']."' target='_blank'>".$row['EnterPhotoPath']."</a></td>";
-                    echo "<td style='border: 1px solid red;width: 12.5%;'><a href='ParkedImage/".$row['ParkPhotoPath']."' target='_blank'>".$row['ParkPhotoPath']."</a></td>";
-                    echo "<td style='border: 1px solid red;width: 12.5%;'><a href='LeaveImage/".$row['LeavePhotoPath']."' target='_blank'>".$row['LeavePhotoPath']."</a></td>";
+                    if($row['EnterPhotoPath']=="手動輸入車牌無照片")
+                      echo "<td style='border: 1px solid red;width: 12.5%;'><a>".$row['EnterPhotoPath']."</a></td>";
+                    else
+                      echo "<td style='border: 1px solid red;width: 12.5%;'><a href='EnterImage/".$row['EnterPhotoPath']."' target='_blank'>".$row['EnterPhotoPath']."</a></td>";
+                    if($row['ParkPhotoPath']=="手動輸入車牌無照片")
+                      echo "<td style='border: 1px solid red;width: 12.5%;'><a>".$row['ParkPhotoPath']."</a></td>";
+                    else
+                      echo "<td style='border: 1px solid red;width: 12.5%;'><a href='ParkedImage/".$row['ParkPhotoPath']."' target='_blank'>".$row['ParkPhotoPath']."</a></td>";
+                    if($row['LeavePhotoPath']=="手動輸入車牌無照片")
+                      echo "<td style='border: 1px solid red;width: 12.5%;'><a>".$row['LeavePhotoPath']."</a></td>";
+                    else
+                      echo "<td style='border: 1px solid red;width: 12.5%;'><a href='LeaveImage/".$row['LeavePhotoPath']."' target='_blank'>".$row['LeavePhotoPath']."</a></td>";
                     echo "<td style='border: 1px solid red;width: 12.5%;'>".$row['EnterTime']."</td>";
                     echo "<td style='border: 1px solid red;width: 12.5%;'>".$row['LeaveTime']."</td>";
                     if($row['LeaveTime']==null){
-                      echo "<td>無法查詢</td>";
+                      echo "<td style='border: 1px solid red;width: 12.5%;'>無法查詢</td>";
                     }
                     else{
                       $diff = date_diff(new DateTime(date( "Y-m-d H:i:s")), new DateTime($row['EnterTime']));
@@ -360,13 +370,13 @@
             <li class="nav-item active"><a class="nav-link" href="index.php">首頁</a></li>
             <li class="nav-item"><a class="nav-link" href="parkingstatus.php">停車場狀態</a></li>
             <li class="nav-item"><a class="nav-link" href="findcar.php">尋找愛車</a></li>
-            <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP車位</a></li>
+            <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP位</a></li>
             <?php 
-              if (isset($_SESSION['TSMC_Islogin'])&&$_SESSION['TSMC_Islogin']=="1"){
-                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個人資料查詢</a></li>";
-                if(isset($_SESSION['TSMC_Status'])&&$_SESSION['TSMC_Status']=="管理員"){
+              if (isset($_COOKIE['TSMC_Islogin'])&&$_COOKIE['TSMC_Islogin']=="1"){
+                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個資查詢</a></li>";
+                if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
                   echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺管理</a></li>";
-                  echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單設定</a></li>";   
+                  echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單</a></li>";   
                 }     
                 echo "<li class='nav-item'>";
                   echo "<a class='nav-link' href='logout.php'>登出</a>";
