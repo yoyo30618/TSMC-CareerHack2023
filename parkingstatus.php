@@ -295,11 +295,13 @@
               for($j=0;$j<20;$j++){
                 if($ParkASpaceStatus[$i*20+$j]==0)
                   $BgColor="green";
-                  else if($ParkASpaceStatus[$i*20+$j]==1)
-                    $BgColor="red";
-                  else if($ParkASpaceStatus[$i*20+$j]==2)//暫停使用
-                    $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
+                else if($ParkASpaceStatus[$i*20+$j]==1)
+                  $BgColor="red";
+                else if($ParkASpaceStatus[$i*20+$j]==2)//暫停使用
+                  $BgColor="orange";
+                ?>
+                  <td bgcolor='<?php echo $BgColor;?>' style='text-align:center'><?php echo $i*20+$j;?></td>
+                <?php
               }
               echo "</tr>";
             }
@@ -323,7 +325,9 @@
                     $BgColor="red";
                   else if($ParkBSpaceStatus[$i*20+$j]==2)//暫停使用
                     $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
+                ?>
+                  <td bgcolor='<?php echo $BgColor;?>' style='text-align:center'><?php echo $i*20+$j;?></td>
+                <?php
               }
               echo "</tr>";
             }
@@ -347,8 +351,10 @@
                     $BgColor="red";
                   else if($ParkCSpaceStatus[$i*20+$j]==2)//暫停使用
                     $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
-              }
+                    ?>
+                    <td bgcolor='<?php echo $BgColor;?>' style='text-align:center'><?php echo $i*20+$j;?></td>
+                  <?php
+                }
               echo "</tr>";
             }
           ?>
@@ -371,8 +377,10 @@
                     $BgColor="red";
                   else if($ParkDSpaceStatus[$i*20+$j]==2)//暫停使用
                     $BgColor="orange";
-                echo "<td bgcolor='$BgColor' style='text-align:center'>".$i*20+$j."</td>";
-              }
+                    ?>
+                    <td bgcolor='<?php echo $BgColor;?>' style='text-align:center'><?php echo $i*20+$j;?></td>
+                  <?php
+                }
               echo "</tr>";
             }
           ?>

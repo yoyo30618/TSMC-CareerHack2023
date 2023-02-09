@@ -7,7 +7,7 @@
 			include_once ("conn_mysql.php");
 			$Isphoto=False;
 			if(!empty($_FILES['LicenseEnterPhoto']['name'])){//如果有拿到照片，取得車牌
-				$License=exec("python test.py 5");
+				$License=exec("python3 test.py 5");
 				$Isphoto=True;
 			}
 			else{//否則抓手動輸入的車牌
@@ -61,7 +61,8 @@
 					$sql_query_LicenseEnter="INSERT INTO `parkingrecord`(`License`, `EnterTime`, `IsIn`, `EnterPhotoPath`) VALUES ('".$License."','".date( "Y-m-d H:i:s")."','1','手動輸入車牌無照片')";
 				else
 					$sql_query_LicenseEnter="INSERT INTO `parkingrecord`(`License`, `EnterTime`, `IsIn`, `EnterPhotoPath`) VALUES ('".$License."','".date( "Y-m-d H:i:s")."','1','".$NowFileName."')";
-				$LicenseEnter_result=mysqli_query($db_link,$sql_query_LicenseEnter) or die("查詢失敗");//查詢帳密
+				echo $sql_query_LicenseEnter;
+				$LicenseEnter_result=mysqli_query($db_link,$sql_query_LicenseEnter) or die("查詢失敗3");//查詢帳密
 				echo"<script  language=\"JavaScript\">alert('已成功設定車輛進入');location.href=\"admin.php\";</script>";
 			} 
 		}

@@ -291,21 +291,29 @@
                       for($j=0;$j<20;$j++){
                         if($ParkStauts["A".$i*20+$j]==1){
                           echo "<td  style='text-align:center'>";
-                          echo "<input disabled type='submit' style='background-color:red;' name='choose' value='A".$i*20+$j."' class='login_btn'/>";
+                        ?>
+                          <input disabled type='submit' style='background-color:red;' name='choose' value='A<?php echo $i*20+$j;?>' class='login_btn'/>
+                        <?php
                           echo "</td>";
-                        }else if(isset($_POST['choose'])&&$_POST['choose']=="A".$i*20+$j){
+                        }else if(isset($_POST['choose'])&&$_POST['choose']=="A".($i*20+$j)){
                           echo "<td  style='text-align:center'>";
-                          echo "<input type='submit' style='background-color:blue;' name='choose' value='A".$i*20+$j."' class='login_btn'/>";
+                          ?>
+                          <input disabled type='submit' style='background-color:blue;' name='choose' value='A<?php echo $i*20+$j;?>' class='login_btn'/>
+                          <?php
                           echo "</td>";
                         }
                         else if($ParkStauts["A".$i*20+$j]==2){
                           echo "<td style='text-align:center'>";
-                          echo "<input disabled type='submit' style='background-color:orange;' name='choose' value='A".$i*20+$j."' class='login_btn'/>";
+                          ?>
+                          <input disabled type='submit' style='background-color:red;' name='choose' value='A<?php echo $i*20+$j;?>' class='login_btn'/>
+                          <?php
                           echo "</td>";
                         }
                         else{
                           echo "<td style='text-align:center'>";
-                          echo "<input type='submit' style='background-color:green;' name='choose' value='A".$i*20+$j."' class='login_btn'/>";
+                          ?>
+                          <input  type='submit' style='background-color:green;' name='choose' value='A<?php echo $i*20+$j;?>' class='login_btn'/>
+                          <?php
                           echo "</td>";
                         }
                       }

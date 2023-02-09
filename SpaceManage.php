@@ -224,7 +224,9 @@
                     else if($ParkASpaceStatus[$i*20+$j]==2)//暫停使用
                       $BgColor="orange";
                       echo "<td  style='text-align:center'>";
-                        echo "<input  type='submit' style='background-color:$BgColor;' name='choose' value='A".$i*20+$j."' class='login_btn'/>";
+                      ?>
+                        <input  type='submit' style='background-color:<?php echo $BgColor;?>' name='choose' value='<?php echo "A".($i*20+$j);?>' class='login_btn'/>
+                      <?php
                       echo "</td>";
                   }
                   echo "</tr>";
@@ -250,7 +252,9 @@
                     else if($ParkBSpaceStatus[$i*20+$j]==2)//暫停使用
                       $BgColor="orange";
                     echo "<td  style='text-align:center'>";
-                      echo "<input  type='submit' style='background-color:$BgColor;' name='choose' value='B".$i*20+$j."' class='login_btn'/>";
+                    ?>
+                      <input  type='submit' style='background-color:<?php echo $BgColor;?>' name='choose' value='<?php echo "B".($i*20+$j);?>' class='login_btn'/>
+                    <?php
                     echo "</td>";
                   }
                   echo "</tr>";
@@ -276,7 +280,9 @@
                     else if($ParkCSpaceStatus[$i*20+$j]==2)//暫停使用
                       $BgColor="orange";
                       echo "<td  style='text-align:center'>";
-                        echo "<input  type='submit' style='background-color:$BgColor;' name='choose' value='C".$i*20+$j."' class='login_btn'/>";
+                      ?>
+                        <input  type='submit' style='background-color:<?php echo $BgColor;?>' name='choose' value='<?php echo "C".($i*20+$j);?>' class='login_btn'/>
+                      <?php
                       echo "</td>";
                   }
                   echo "</tr>";
@@ -302,7 +308,9 @@
                       else if($ParkDSpaceStatus[$i*20+$j]==2)//暫停使用
                         $BgColor="orange";
                         echo "<td  style='text-align:center'>";
-                          echo "<input  type='submit' style='background-color:$BgColor;' name='choose' value='D".$i*20+$j."' class='login_btn'/>";
+                        ?>
+                          <input  type='submit' style='background-color:<?php echo $BgColor;?>' name='choose' value='<?php echo "D".($i*20+$j);?>' class='login_btn'/>
+                        <?php
                         echo "</td>";
                   }
                   echo "</tr>";

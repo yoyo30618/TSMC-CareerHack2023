@@ -7,7 +7,7 @@
 			include_once ("conn_mysql.php");
 			$Isphoto=False;
 			if(!empty($_FILES['LicenseParkedPhoto']['name'])){//如果有拿到照片，取得車牌
-				$License=exec("python test.py 5");
+				$License=exec("python3 test.py 5");
 				$Isphoto=true;
 			}
 			else{//否則抓手動輸入的車牌
