@@ -63,8 +63,18 @@
 				$SetOldPark_result=mysqli_query($db_link,$sql_query_SetOldPark) or die("查詢失敗");//查詢帳密
 				
 				/*必定離場 離場後檢查是否違規*/
-				
-
+				$sql_query_SetVIPLeave="SELECT * FROM `vip` WHERE `License`='".$License."' AND `IsUsed`='1'";
+				$SetVIPLeave_result=mysqli_query($db_link,$sql_query_SetVIPLeave) or die("查詢失敗");//查詢帳密
+				while($row=mysqli_fetch_array($SetVIPLeave_result)){
+					if(date( "Y-m-d H:i:s")>$row['EndTime']){
+						echo"<script  language=\"JavaScript\">alert('超過預約時間才離場！已自動新增至違規名單處罰三天');location.href=\"admin.php\";</script>";
+						$sql_query_InsertNewBlack="INSERT INTO `blacklist`(`License`, `StartTime`, `EndTime`, `Info`) VALUES ('".$License."','".date( "Y-m-d H:i:s")."','".date( "Y-m-d H:i:s",strtotime('+3 day'))."','VIP車位違停超時處罰三天')";
+						$InsertNewBlack_result=mysqli_query($db_link,$sql_query_InsertNewBlack) or die("查詢失敗");
+					
+					}
+					break;
+				}
+		
 
 				
 				//找到該筆，確認離場

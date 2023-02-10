@@ -152,7 +152,8 @@
               if (isset($_COOKIE['TSMC_Islogin'])&&$_COOKIE['TSMC_Islogin']=="1"){
                   echo "<li class='nav-item'><a class='nav-link' href='info.php'>個資查詢</a></li>";
                 if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
-                  echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺管理</a></li>";
+                  echo "<li class='nav-item'><a class='nav-link' href='NowTimeStatus.php'>實況</a></li>";
+                  echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺</a></li>";
                   echo "<li class='nav-item'><a class='nav-link' href='SpaceManage.php'>車位管理</a></li>";
                   echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單</a></li>";   
                 }     
@@ -448,7 +449,8 @@
               if (isset($_COOKIE['TSMC_Islogin'])&&$_COOKIE['TSMC_Islogin']=="1"){
                 echo "<li class='nav-item'><a class='nav-link' href='info.php'>個資查詢</a></li>";
                 if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
-                  echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺管理</a></li>";
+                  echo "<li class='nav-item'><a class='nav-link' href='NowTimeStatus.php'>實況</a></li>";
+                  echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺</a></li>";
                   echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單</a></li>";   
                 }     
                 echo "<li class='nav-item'>";

@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-TW">
+  <meta http-equiv="refresh" content="1"/>
   <?php
     session_start();//開啟session
     include_once ("conn_mysql.php");
@@ -53,31 +54,22 @@
     while($row=mysqli_fetch_array($RecordCount_result)){
       $RecordCount=$row['res'];
     }
-
-
-    $ParkStauts=array();
-    for($i=0;$i<100;$i++)
-      $ParkStauts["A".$i]=0;
     /*查詢每一格各自狀態*/
     $Sql_query_parkstatusA="SELECT * FROM `parkstatusa`";
     $ParkstatusA_result=mysqli_query($db_link,$Sql_query_parkstatusA) or die("查詢失敗");//查詢帳密
     $ParkASpaceStatus=array();
     while($row=mysqli_fetch_array($ParkstatusA_result)){
-      if($row['IsUsed']==0){//位置不可用
+      if($row['IsUsed']==0)//位置不可用
         $ParkASpaceStatus[$row['SpaceID']]=2;
-        $ParkStauts["A".$row['SpaceID']]=2;
-      }
       else
-        $ParkASpaceStatus[$row['SpaceID']]=$row['IsParked'];
+      $ParkASpaceStatus[$row['SpaceID']]=$row['IsParked'];
     }
     $Sql_query_parkstatusB="SELECT * FROM `parkstatusb`";
     $ParkstatusB_result=mysqli_query($db_link,$Sql_query_parkstatusB) or die("查詢失敗");//查詢帳密
     $ParkBSpaceStatus=array();
     while($row=mysqli_fetch_array($ParkstatusB_result)){
-      if($row['IsUsed']==0){//位置不可用
-        $ParkASpaceStatus[$row['SpaceID']]=2;
-        $ParkStauts["B".$row['SpaceID']]=2;
-      }
+      if($row['IsUsed']==0)//位置不可用
+        $ParkBSpaceStatus[$row['SpaceID']]=2;
       else
       $ParkBSpaceStatus[$row['SpaceID']]=$row['IsParked'];
     }
@@ -85,10 +77,8 @@
     $ParkstatusC_result=mysqli_query($db_link,$Sql_query_parkstatusC) or die("查詢失敗");//查詢帳密
     $ParkCSpaceStatus=array();
     while($row=mysqli_fetch_array($ParkstatusC_result)){
-      if($row['IsUsed']==0){//位置不可用
-        $ParkASpaceStatus[$row['SpaceID']]=2;
-        $ParkStauts["C".$row['SpaceID']]=2;
-      }
+      if($row['IsUsed']==0)//位置不可用
+        $ParkCSpaceStatus[$row['SpaceID']]=2;
       else
       $ParkCSpaceStatus[$row['SpaceID']]=$row['IsParked'];
     }
@@ -96,30 +86,10 @@
     $ParkstatusD_result=mysqli_query($db_link,$Sql_query_parkstatusD) or die("查詢失敗");//查詢帳密
     $ParkDSpaceStatus=array();
     while($row=mysqli_fetch_array($ParkstatusD_result)){
-      if($row['IsUsed']==0){//位置不可用
-        $ParkASpaceStatus[$row['SpaceID']]=2;
-        $ParkStauts["D".$row['SpaceID']]=2;
-      }
+      if($row['IsUsed']==0)//位置不可用
+        $ParkDSpaceStatus[$row['SpaceID']]=2;
       else
-        $ParkDSpaceStatus[$row['SpaceID']]=$row['IsParked'];
-    }
-
-    /*檢查某時段預約狀態*/
-    if(isset($_POST['checktimesubmit'])){
-      if($_POST['StartTime']>$_POST['EndTime']){
-        echo"<script  language=\"JavaScript\">alert('時段選擇無效');location.href=\"vip.php\";</script>";
-		
-      }
-      $dt = new DateTime($_POST['StartTime']);
-			$formatted_StartTime = $dt->format("Y-m-d H:i:s");
-      $dt = new DateTime($_POST['EndTime']);
-			$formatted_EndTime = $dt->format("Y-m-d H:i:s");
-			$sql_query_checktime="SELECT * FROM `vip` WHERE (`StartTime`<'".$formatted_StartTime."' AND `EndTime`>'".$formatted_StartTime."') OR (`StartTime`<'".$formatted_EndTime."' AND `EndTime`>'".$formatted_EndTime."')";
-      $checktime_result=mysqli_query($db_link,$sql_query_checktime) or die("查詢失敗");//查詢帳密
-			while($row=mysqli_fetch_array($checktime_result)){
-        if($ParkStauts[$row['SpaceID']]==0)
-				  $ParkStauts[$row['SpaceID']]=1;
-			}
+      $ParkDSpaceStatus[$row['SpaceID']]=$row['IsParked'];
     }
   ?>
  <head>
@@ -223,214 +193,94 @@
     <!-- 上方背景橫幅開始-->
     <section class="breadcrumb-area">
      <div class="breadcrumb-content text-center">
-      <h1>預約VIP位</h1>
+      <h1>實時停車狀態顯示</h1>
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="index.php">首頁</a></li>
-        <li class="breadcrumb-item active" aria-current="page">預約VIP位</li>
+        <li class="breadcrumb-item active" aria-current="page">實時停車狀態顯示</li>
        </ol>
       </nav>
      </div>
     </section>
-    <!-- 上方背景橫幅結束-->    
-    <!-- 各停車場目前使用狀態開始 -->
-    <br>
-    <section class="service-provide-area">
-     <div class="container">
-      <div class="row">
-      <div style='width:100%;text-align:center;margin:0 auto;'>
-          <form action="vip.php" method="POST" style="width:100%;">
-            <legend>請先選擇欲預約之時段</legend>
-            <table style='width:100%;text-align:center;align:center;'>             
-              <tr>
-                <td style="width: 50%;">起始時間：</td>
-                <td style="width: 50%;"><input required type="datetime-local" name="StartTime" <?php if(isset($_POST["StartTime"])) echo "value='".$_POST["StartTime"]."'";?>/></td>
-              </tr>
-              <tr>
-                <td style="width: 50%;">結束時間：</td>
-                <td style="width: 50%;"><input required type="datetime-local" name="EndTime" <?php if(isset($_POST["EndTime"])) echo "value='".$_POST["EndTime"]."'";?>/></td>
-              </tr>
-              <tr>
-                <td colspan="2"><input type="submit" name="checktimesubmit" value="查詢時段"  style="width: 50%;" class="login_btn"/></td>
-              </tr>
-            </table>
-          </form>
-        </div>  
-      </div>
-     </div>
-    </section>
-    <!-- 各停車場目前使用狀態結束 -->
-    <!-- 預約表單開始 -->
+    <!-- 上方背景橫幅結束-->
     <?php
-      if(isset($_POST['checktimesubmit'])){
-    ?>
+      $NowEnterTime= array();
+      $NowEnterLicense= array();
+      $NowEnterPath= array();
+      $NowLeaveTime= array();
+      $NowLeaveLicense= array();
+      $NowLeavePath= array();
+      $sql_query_NowEnter="SELECT * FROM `parkingrecord` ORDER BY `parkingrecord`.`EnterTime` DESC";
+      $NowEnter_result=mysqli_query($db_link,$sql_query_NowEnter) or die("查詢失敗");
+      $t=0;
+      while($row=mysqli_fetch_array($NowEnter_result)){
+        $NowEnterTime[$t]=$row['EnterTime'];
+        $NowEnterLicense[$t]=$row['License'];
+        $NowEnterPath[$t]=$row['EnterPhotoPath'];
+        $t++;
+      }
+      for(;$t<5;$t++){
+        $NowEnterTime[$t]="無資料";
+        $NowEnterLicense[$t]="無資料";
+        $NowEnterPath[$t]="無資料";
+      }
+
+      $sql_query_NowLeave="SELECT * FROM `parkingrecord` ORDER BY `parkingrecord`.`LeaveTime` DESC";
+      $NowLeave_result=mysqli_query($db_link,$sql_query_NowLeave) or die("查詢失敗");
+      $t=0;
+      while($row=mysqli_fetch_array($NowLeave_result)){
+        $NowLeaveTime[$t]=$row['LeaveTime'];
+        $NowLeaveLicense[$t]=$row['License'];
+        $NowLeavePath[$t]=$row['LeavePhotoPath'];
+        $t++;
+      }
+      for(;$t<5;$t++){
+        $NowLeaveTime[$t]="無資料";
+        $NowLeaveLicense[$t]="無資料";
+        $NowLeavePath[$t]="無資料";
+      }
+		?>
+    <!-- 實時車況開始 -->
+    <form method="post" action="SpaceChg.php">
       <section class="service-provide-area">
         <div class="container">
           <div class="row">
-            <h2 style="width:100%;color:red;text-align:center">
-              <?php
-                if(isset($_POST['StartTime']))
-                  echo "目前選定時段<br>".$_POST['StartTime']."~".$_POST['EndTime'];
-                else
-                  echo "請先於上方選擇欲預約之時段";
-              ?>
-            </h2>
             <table width="100%" style="border: 1px solid red;">
               <thead>
                 <tr>
-                  <th colspan="20" style="border: 1px solid red;text-align:center;">*VIP車位目前僅供A停車場預約*<br>A停車場<br>(綠色代表可停車/紅色代表該車位有車/橘色代表該車位無法使用/藍色代表目前選中)</th>
+                <th colspan="3" style="border: 1px solid red;text-align:center;">車輛入場</th>
+                <th colspan="3" style="border: 1px solid red;text-align:center;">車輛出場</th>
                 </tr>
               </thead>
               <tbody>
-                <form method="post" action="vip.php">
-                  <input type="hidden" name="checktimesubmit" value="1">
-                  <input type="hidden" name="StartTime" value="<?php echo $_POST['StartTime'];?>">
-                  <input type="hidden" name="EndTime" value="<?php echo $_POST['EndTime'];?>">
-                  <?php
-                    for($i=0;$i<5;$i++){
-                      echo "<tr>";
-                      for($j=0;$j<20;$j++){
-                        if($ParkStauts["A".$i*20+$j]==1){
-                          echo "<td  style='text-align:center'>";
-                        ?>
-                          <input disabled type='submit' style='background-color:red;' name='choose' value='A<?php echo $i*20+$j;?>' class='login_btn'/>
-                        <?php
-                          echo "</td>";
-                        }else if(isset($_POST['choose'])&&$_POST['choose']=="A".($i*20+$j)){
-                          echo "<td  style='text-align:center'>";
-                          ?>
-                          <input disabled type='submit' style='background-color:blue;' name='choose' value='A<?php echo $i*20+$j;?>' class='login_btn'/>
-                          <?php
-                          echo "</td>";
-                        }
-                        else if($ParkStauts["A".$i*20+$j]==2){
-                          echo "<td style='text-align:center'>";
-                          ?>
-                          <input disabled type='submit' style='background-color:red;' name='choose' value='A<?php echo $i*20+$j;?>' class='login_btn'/>
-                          <?php
-                          echo "</td>";
-                        }
-                        else{
-                          echo "<td style='text-align:center'>";
-                          ?>
-                          <input  type='submit' style='background-color:green;' name='choose' value='A<?php echo $i*20+$j;?>' class='login_btn'/>
-                          <?php
-                          echo "</td>";
-                        }
-                      }
-                      echo "</tr>";
-                    }
-                  ?>
-                </form> 
-              <?php 
-                if(isset($_POST['choose'])){
-              ?>
-                <form method="post" action="vipcheck.php">
-                  <input type="hidden" name="checktimesubmit" value="1">
-                  <input type="hidden" name="StartTime" value="<?php echo $_POST['StartTime'];?>">
-                  <input type="hidden" name="EndTime" value="<?php echo $_POST['EndTime'];?>">
-                  <input type="hidden" name="SpaceID" value="<?php echo $_POST['choose'];?>">
-                  <tr>
-                    <td colspan="10" style="text-align:center;">預約車牌(僅大寫英文+數字)</td>
-                    <td colspan="10" style="text-align:center;"><input required type="text" name="License"  id="LicenseInput"/></td>
-                  </tr>
-                  <tr>
-                    <td colspan="20" style="text-align:center"><input type="submit" name="vipsubmit" value="預約VIP位"  style="width: 50%;" class="login_btn"/></td>
-                  </tr>
-                </form>
-              <?php
-                }
-              ?>
+                <?php
+                  for($i=0;$i<5;$i++){
+                    echo "<tr>";
+                    echo "<td style='border: 1px solid red;text-align:center;text-align:center'>".$NowEnterLicense[$i]."</td>";
+                    echo "<td style='border: 1px solid red;text-align:center;text-align:center'>".$NowEnterTime[$i]."</td>";
+                    if($NowEnterPath[$i]=="手動輸入車牌無照片")
+                      echo "<td style='border: 1px solid red;text-align:center;text-align:center'>手動輸入車牌無照片</td>";
+                    else
+                    echo "<td style='border: 1px solid red;text-align:center;text-align:center'><img src='EnterImage/".$NowEnterPath[$i]."' width='300' heigh='200'></td>";
+                    echo "<td style='border: 1px solid red;text-align:center;text-align:center'>".$NowLeaveLicense[$i]."</td>";
+                    echo "<td style='border: 1px solid red;text-align:center;text-align:center'>".$NowLeaveTime[$i]."</td>";
+                    if($NowLeavePath[$i]=="手動輸入車牌無照片")
+                      echo "<td style='border: 1px solid red;text-align:center;text-align:center'>手動輸入車牌無照片</td>";
+                    else
+                      echo "<td style='border: 1px solid red;text-align:center;text-align:center'><img src='LeaveImage/".$NowLeavePath[$i]."' width='300' heigh='200'></td>";
+                    echo "<tr>";
+                    echo "</tr>";
+                  }
+                ?>
               </tbody>
-            </table> 
+            </table>
+
+
           </div>
         </div>
       </section>
-    <?php
-      }
-    ?>
-    <script>
-      document.getElementById("LicenseInput").onkeyup = function() {
-        this.value = this.value.replace(/[^A-Z0-9]/g, "").substr(0, 7);//限定大寫英文+數字與7碼
-      };
-    </script>
-    <!-- 預約表單結束 -->
-    <!-- 各停車場目前使用狀態開始 -->
-    <br>
-    <section class="service-provide-area">
-     <div class="container">
-      <div class="row">
-       <div class="col-md-12">
-        <div class="section-title">
-         <h2>各停車場目前使用狀態</h2>
-         <div class="section-line">
-          <span></span>
-         </div>
-        </div>
-       </div>
-      </div>
-      <div class="row">
-       <div class="col-md-12">
-        <div class="service-provide-block">
-         <div class="service-provide-single">
-          <img src="img/projects/1.jpg" alt="img" />
-          <h4><a>A停車場</a></h4>
-          <p>台積電F12P1-張忠謀大樓</p>
-          <div class="counter-content-single">
-            <h4>停車場可用空位</h4>
-            <h2>  
-              <?php
-                echo "<span class='timer' data-from='0' data-to='$ParkASpace' data-speed='5000' data-refresh-interval='50'></span>";
-              ?>
-            </h2>
-          </div>
-         </div> 
-         <div class="service-provide-single">
-          <img src="img/projects/2.jpg" alt="img" />
-          <h4><a>B停車場</a></h4>
-          <p>台積電五廠</p>
-          <div class="counter-content-single">
-            <h4>停車場可用空位</h4>
-            <h2>  
-              <?php
-                echo "<span class='timer' data-from='0' data-to='$ParkBSpace' data-speed='5000' data-refresh-interval='50'></span>";
-              ?>
-            </h2>
-          </div>
-         </div>
-         <div class="service-provide-single">
-          <img src="img/projects/3.jpg" alt="img" />
-          <h4><a>C停車場</a></h4>
-          <p>台積電十二廠P6</p>
-          <div class="counter-content-single">
-            <h4>停車場可用空位</h4>
-            <h2>  
-              <?php
-                echo "<span class='timer' data-from='0' data-to='$ParkCSpace' data-speed='5000' data-refresh-interval='50'></span>";
-              ?>
-            </h2>
-          </div>
-         </div>
-         <div class="service-provide-single">
-          <img src="img/projects/4.jpg" alt="img" />
-          <h4><a>D停車場</a></h4>
-          <p>台積電十二廠P4,5</p>
-          <div class="counter-content-single">
-            <h4>停車場可用空位</h4>
-            <h2>  
-              <?php
-                echo "<span class='timer' data-from='0' data-to='$ParkDSpace' data-speed='5000' data-refresh-interval='50'></span>";
-              ?>
-            </h2>
-          </div>
-         </div>
-        </div>
-       </div>
-      </div>
-     </div>
-    </section>
-    <!-- 各停車場目前使用狀態結束 -->
-
+    </form>
+    <!-- 實時車況結束 -->    
     <!-- 台積電簡介開始 -->
     <section class="analysis-area section-padding">
      <div class="container">

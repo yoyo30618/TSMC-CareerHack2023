@@ -162,7 +162,8 @@
               if (isset($_COOKIE['TSMC_Islogin'])&&$_COOKIE['TSMC_Islogin']=="1"){
                 echo "<li class='nav-item'><a class='nav-link' href='info.php'>個資查詢</a></li>";
                 if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
-                  echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺管理</a></li>";
+                  echo "<li class='nav-item'><a class='nav-link' href='NowTimeStatus.php'>實況</a></li>";
+                  echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺</a></li>";
                   echo "<li class='nav-item'><a class='nav-link' href='SpaceManage.php'>車位管理</a></li>";
                   echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單</a></li>";   
                 }     
@@ -228,6 +229,7 @@
               <?php
                 echo "<span class='timer' data-from='0' data-to='$ParkASpace' data-speed='5000' data-refresh-interval='50'></span>";
               ?>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d231581.06593437924!2d121.17391753637183!3d24.91659395494759!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x3442ade21410863f%3A0xaa08be1c6abbcce3!2z5Y-w5YyX5biC5Y2X5riv5Y2A57aT6LK_5LiA6Lev5YGc6LuK5aC0VEZD5Y2X5riv57aT6LK_5aSn5qiTKOWPsOiCpUMyKQ!3m2!1d25.0577643!2d121.6187592!4m5!1s0x3468362042ee2207%3A0x4dd1869db207805b!2z5paw56u55biC5p2x5Y2A5Yqb6KGM5LiD6Lev5Y-w56mN6Zu7RjEyUDE!3m2!1d24.7733959!2d121.0123653!5e0!3m2!1szh-TW!2stw!4v1676006147885!5m2!1szh-TW!2stw" width="200" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </h2>
           </div>
          </div> 
@@ -241,6 +243,7 @@
               <?php
                 echo "<span class='timer' data-from='0' data-to='$ParkBSpace' data-speed='5000' data-refresh-interval='50'></span>";
               ?>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d231581.06593437924!2d121.16795558637186!3d24.91659395494759!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x3442ade21410863f%3A0xaa08be1c6abbcce3!2z5Y-w5YyX5biC5Y2X5riv5Y2A57aT6LK_5LiA6Lev5YGc6LuK5aC0VEZD5Y2X5riv57aT6LK_5aSn5qiTKOWPsOiCpUMyKQ!3m2!1d25.0577643!2d121.6187592!4m5!1s0x346849fd455129a3%3A0xbd7565fdda91ea5c!2z5paw56u557ij5a-25bGx6YSJ5ZyS5Y2A5LiJ6Lev5Y-w56mN6Zu75LqU5bug!3m2!1d24.7741176!2d120.9977826!5e0!3m2!1szh-TW!2stw!4v1676006269154!5m2!1szh-TW!2stw" width="200" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </h2>
           </div>
          </div>
@@ -254,6 +257,7 @@
               <?php
                 echo "<span class='timer' data-from='0' data-to='$ParkCSpace' data-speed='5000' data-refresh-interval='50'></span>";
               ?>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d231581.06653927884!2d121.17357500149919!3d24.916593632779183!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x3442ade21410863f%3A0xaa08be1c6abbcce3!2zVEZD5Y2X5riv57aT6LK_5aSn5qiTKOWPsOiCpUMyKSAxMTXlj7DljJfluILljZfmuK_ljYDntpPosr_kuIDot68xNzDomZ8!3m2!1d25.0577643!2d121.6187592!4m5!1s0x346849dfe535ef27%3A0xe1fd4f198496bc84!2z5paw56u557ij5a-25bGx6YSJ5ZyS5Y2A5LqM6Lev5Y-w56mN6Zu7RjEyUDTlj7DnqY3pm7vljYHkuozlu6BQNg!3m2!1d24.7713146!2d121.0111965!5e0!3m2!1szh-TW!2stw!4v1676006806417!5m2!1szh-TW!2stw" width="200" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </h2>
           </div>
          </div>
@@ -267,6 +271,7 @@
               <?php
                 echo "<span class='timer' data-from='0' data-to='$ParkDSpace' data-speed='5000' data-refresh-interval='50'></span>";
               ?>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d231581.06653927884!2d121.17357500149919!3d24.916593632779183!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x3442ade21410863f%3A0xaa08be1c6abbcce3!2z5Y-w5YyX5biC5Y2X5riv5Y2A57aT6LK_5LiA6Lev5YGc6LuK5aC0VEZD5Y2X5riv57aT6LK_5aSn5qiTKOWPsOiCpUMyKQ!3m2!1d25.0577643!2d121.6187592!4m5!1s0x346849df982d27c1%3A0x7e8b3aa7be41e19b!2z5paw56u557ij5a-25bGx6YSJ5ZyS5Y2A5LqM6LevIOWPsOepjembuyDljYHkuozlu6BQNA!3m2!1d24.770239699999998!2d121.01231469999999!5e0!3m2!1szh-TW!2stw!4v1676006873241!5m2!1szh-TW!2stw" width="200" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </h2>
           </div>
          </div>
@@ -558,7 +563,8 @@
               if (isset($_COOKIE['TSMC_Islogin'])&&$_COOKIE['TSMC_Islogin']=="1"){
                 echo "<li class='nav-item'><a class='nav-link' href='info.php'>個資查詢</a></li>";
                 if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
-                  echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺管理</a></li>";
+                  echo "<li class='nav-item'><a class='nav-link' href='NowTimeStatus.php'>實況</a></li>";
+                  echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺</a></li>";
                   echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單</a></li>";   
                 }     
                 echo "<li class='nav-item'>";
