@@ -143,6 +143,9 @@
     <!-- 查詢開始 -->
     <section class="intro-area">
       <div class="container" align="middle">
+        <form action="connectline.php" method="POST">
+          <input type="submit" name="searchname" value="管理者點此以連動通知之LINE帳號"  style="width: 50%;" class="login_btn"/>
+        </form><br>
         <form action="info.php" method="POST">
           <legend>請輸入欲修改個資之車牌/姓名</legend>
           <table>

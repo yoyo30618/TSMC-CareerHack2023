@@ -28,7 +28,8 @@
 					}
 				}
 				/*將檔案存放置伺服器成功*/
-				$License=exec("python3 test.py 5");
+				$License=exec("sudo /root/anaconda3/envs/torch/bin/python pic2txt.py  EnterImage/".$NowFileName);
+
 				$Isphoto=True;
 			}
 			else{//否則抓手動輸入的車牌
@@ -54,6 +55,33 @@
 				}
 			}
 			if($IsWhite==FALSE && $IsBlack==TRUE){//無法進入者
+				/*發送測試訊息*/
+				$LineToken="";
+				$sql_query_CheckLineToken="SELECT * FROM `account`";
+				$CheckLineToken_result=mysqli_query($db_link,$sql_query_CheckLineToken) or die("查詢失敗2");//查詢帳密
+				while($row=mysqli_fetch_array($CheckLineToken_result)){
+					$LineToken=$row['LineToken'];
+					break;
+				}
+				/*底下為LINE NOTIFY的部分，傳送LINE確認*/
+				$headers = array(
+					'Content-Type: multipart/form-data',
+					'Authorization: Bearer '.$LineToken
+				);//宣告一下表頭與要傳送的TOKEN(權杖)，這樣才知道要傳給哪個BOT
+				$message = array(
+					'message' => '有人是黑名單但嘗試想進入停車場，車牌為'.$License
+				);//宣告一下訊息內容
+				//一些關於curl的設定(有點類似網頁版本的CMD?)
+				$ch = curl_init();//想像成宣告一個空容器?
+				curl_setopt($ch , CURLOPT_URL , "https://notify-api.line.me/api/notify");//宣告要傳遞的網址
+				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);//要傳遞的表頭
+				curl_setopt($ch, CURLOPT_POST, true);//POST方式傳遞
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $message);//要傳遞的訊息內容
+				$result = curl_exec($ch);//把容器拋出去~!
+				curl_close($ch);
+
+
+
 				echo"<script  language=\"JavaScript\">alert('車輛無權進入，請洽管理室');location.href=\"admin.php\";</script>";
 			}
 			else{

@@ -28,7 +28,7 @@
 					}
 				}
 				/*將檔案存放置伺服器成功*/
-				$License=exec("python3 test.py 5");
+				$License=exec("sudo /root/anaconda3/envs/torch/bin/python pic2txt.py  ParkedImage/".$NowFileName);
 				$Isphoto=true;
 			}
 			else{//否則抓手動輸入的車牌
@@ -78,7 +78,7 @@
 					}
 					$IsVIPPark=false;
 					if($Park=="A"){
-						$sql_query_CheckVIPPark="SELECT * FROM `parkstatusa` WHERE `SpaceID`='".$SpaceNum."'";
+						$sql_query_CheckVIPPark="SELECT * FROM `parkstatusa` WHERE `SpaceID`='".$SpaceID."'";
 						$CheckVIPPark_result=mysqli_query($db_link,$sql_query_CheckVIPPark) or die("查詢失敗");
 						while($row=mysqli_fetch_array($CheckVIPPark_result)){
 							if($row['IsVIP']==1)
@@ -88,6 +88,7 @@
 					}
 					if($IsVIPPark){//如果停放到VIP區了 但並沒有預約 通知並處罰
 						$sql_query_CheckViolation="SELECT * FROM `vip` WHERE `SpaceID`='".$OldParkRec."' AND `License`='".$License."' AND `StartTime`<'".date( "Y-m-d H:i:s")."' AND `EndTime`>'".date( "Y-m-d H:i:s")."'";	
+						echo $sql_query_CheckViolation;
 						$IsOKVIP=false;
 						$CheckViolation_result=mysqli_query($db_link,$sql_query_CheckViolation) or die("查詢失敗");
 						$NowInVIP=-1;
@@ -98,6 +99,30 @@
 						}
 						if(!$IsOKVIP){//不合法的VIP 他停到不該停的位置了 他沒預約但停在VIP
 							//顯示不合法
+							/*發送測試訊息*/
+							$LineToken="";
+							$sql_query_CheckLineToken="SELECT * FROM `account`";
+							$CheckLineToken_result=mysqli_query($db_link,$sql_query_CheckLineToken) or die("查詢失敗2");//查詢帳密
+							while($row=mysqli_fetch_array($CheckLineToken_result)){
+								$LineToken=$row['LineToken'];
+								break;
+							}
+							/*底下為LINE NOTIFY的部分，傳送LINE確認*/
+							$headers = array(
+								'Content-Type: multipart/form-data',
+								'Authorization: Bearer '.$LineToken
+							);//宣告一下表頭與要傳送的TOKEN(權杖)，這樣才知道要傳給哪個BOT
+							$message = array(
+								'message' => '此車輛並沒有預約此VIP車位，車牌為'.$License
+							);//宣告一下訊息內容
+							//一些關於curl的設定(有點類似網頁版本的CMD?)
+							$ch = curl_init();//想像成宣告一個空容器?
+							curl_setopt($ch , CURLOPT_URL , "https://notify-api.line.me/api/notify");//宣告要傳遞的網址
+							curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);//要傳遞的表頭
+							curl_setopt($ch, CURLOPT_POST, true);//POST方式傳遞
+							curl_setopt($ch, CURLOPT_POSTFIELDS, $message);//要傳遞的訊息內容
+							$result = curl_exec($ch);//把容器拋出去~!
+							curl_close($ch);
 							echo"<script  language=\"JavaScript\">alert('此車輛並沒有預約此VIP車位！已自動新增至違規名單處罰三天');</script>";	
 							$sql_query_InsertNewBlack="INSERT INTO `blacklist`(`License`, `StartTime`, `EndTime`, `Info`) VALUES ('".$License."','".date( "Y-m-d H:i:s")."','".date( "Y-m-d H:i:s",strtotime('+3 day'))."','違停VIP車位處罰三天')";
 							$InsertNewBlack_result=mysqli_query($db_link,$sql_query_InsertNewBlack) or die("查詢失敗");

@@ -75,18 +75,18 @@
     $ParkBSpaceStatus=array();
     while($row=mysqli_fetch_array($ParkstatusB_result)){
       if($row['IsUsed']==0){//位置不可用
-        $ParkASpaceStatus[$row['SpaceID']]=2;
+        $ParkBSpaceStatus[$row['SpaceID']]=2;
         $ParkStauts["B".$row['SpaceID']]=2;
       }
       else
-      $ParkBSpaceStatus[$row['SpaceID']]=$row['IsParked'];
+        $ParkBSpaceStatus[$row['SpaceID']]=$row['IsParked'];
     }
     $Sql_query_parkstatusC="SELECT * FROM `parkstatusc`";
     $ParkstatusC_result=mysqli_query($db_link,$Sql_query_parkstatusC) or die("查詢失敗");//查詢帳密
     $ParkCSpaceStatus=array();
     while($row=mysqli_fetch_array($ParkstatusC_result)){
       if($row['IsUsed']==0){//位置不可用
-        $ParkASpaceStatus[$row['SpaceID']]=2;
+        $ParkCSpaceStatus[$row['SpaceID']]=2;
         $ParkStauts["C".$row['SpaceID']]=2;
       }
       else
@@ -97,7 +97,7 @@
     $ParkDSpaceStatus=array();
     while($row=mysqli_fetch_array($ParkstatusD_result)){
       if($row['IsUsed']==0){//位置不可用
-        $ParkASpaceStatus[$row['SpaceID']]=2;
+        $ParkDSpaceStatus[$row['SpaceID']]=2;
         $ParkStauts["D".$row['SpaceID']]=2;
       }
       else
@@ -120,6 +120,7 @@
         if($ParkStauts[$row['SpaceID']]==0)
 				  $ParkStauts[$row['SpaceID']]=1;
 			}
+
     }
   ?>
  <head>
@@ -290,23 +291,24 @@
                     for($i=0;$i<5;$i++){
                       echo "<tr>";
                       for($j=0;$j<20;$j++){
-                        if($ParkStauts["A".$i*20+$j]==1){
+                        if($ParkASpaceStatus[$i*20+$j]==1){
                           echo "<td  style='text-align:center'>";
                         ?>
                           <input disabled type='submit' style='background-color:red;' name='choose' value='A<?php echo $i*20+$j;?>' class='login_btn'/>
                         <?php
                           echo "</td>";
-                        }else if(isset($_POST['choose'])&&$_POST['choose']=="A".($i*20+$j)){
-                          echo "<td  style='text-align:center'>";
+                        }
+                        else if($ParkASpaceStatus[$i*20+$j]==2){
+                          echo "<td style='text-align:center'>";
                           ?>
-                          <input disabled type='submit' style='background-color:blue;' name='choose' value='A<?php echo $i*20+$j;?>' class='login_btn'/>
+                          <input disabled type='submit' style='background-color:orange;' name='choose' value='A<?php echo $i*20+$j;?>' class='login_btn'/>
                           <?php
                           echo "</td>";
                         }
-                        else if($ParkStauts["A".$i*20+$j]==2){
-                          echo "<td style='text-align:center'>";
+                        else if(isset($_POST['choose'])&&$_POST['choose']=="A".($i*20+$j)){
+                          echo "<td  style='text-align:center'>";
                           ?>
-                          <input disabled type='submit' style='background-color:red;' name='choose' value='A<?php echo $i*20+$j;?>' class='login_btn'/>
+                          <input disabled type='submit' style='background-color:blue;' name='choose' value='A<?php echo $i*20+$j;?>' class='login_btn'/>
                           <?php
                           echo "</td>";
                         }

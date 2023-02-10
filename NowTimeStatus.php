@@ -281,48 +281,7 @@
       </section>
     </form>
     <!-- 實時車況結束 -->    
-    <!-- 台積電簡介開始 -->
-    <section class="analysis-area section-padding">
-     <div class="container">
-      <div class="row">
-       <div class="col-md-12 col-lg-12 col-xl-6">
-        <div class="analysis-mask-block">
-         <img src="img/services/shape.png" alt="img" />
-         <div class="analysis-mask">
-          <div class="analysis-mask-image">
-           <img src="img/services/4.jpg" alt="img" />
-          </div>
-         </div>
-        </div>
-       </div>
-       <div class="col-md-12 col-lg-12 col-xl-6">
-        <div class="analysis-content">
-         <h2>台積電集團</h2>
-         <p>
-           　　台灣積體電路製造(Taiwan Semiconductor Manufacturing Co., Ltd.)，簡稱台積電或TSMC，與旗下公司合稱時則稱作台積電集團<br>
-           　　是臺灣一家從事晶圓代工的公司，為全球規模最大的半導體製造廠，可量產的邏輯IC為全球最先進的製程，總部位於新竹科學園區，主要廠房則分布於臺灣的新竹、臺中、臺南等科學園區<br>
-           　　2021年8月，台積電在美國《財富》雜誌評選「全球最大500家公司」排行榜中，依營收規模名列全球第251名。2019年8月，台積電在PwC發表的「全球頂尖100家公司」排行榜中，依公司市場價值名列全球第37名
-         </p>
-         <div class="about-count">
-          <div class="counter-content-single">
-           <h2><span class="timer" data-from="0" data-to="<?php echo $ParkALLSpace;?>" data-speed="5000" data-refresh-interval="50"></span></h2>
-           <h4>停車場可用空位</h4>
-          </div>
-          <div class="counter-content-single">
-           <h2><span class="timer" data-from="0" data-to="<?php echo $ALLVIP;?>" data-speed="5000" data-refresh-interval="50"></span></h2>
-           <h4>VIP車位可預約空位</h4>
-          </div>
-          <div class="counter-content-single">
-           <h2><span class="timer" data-from="0" data-to="<?php echo $RecordCount;?>" data-speed="5000" data-refresh-interval="50"></span></h2>
-           <h4>已完成停車紀錄</h4>
-          </div>
-         </div>
-        </div>
-       </div>
-      </div>
-     </div>
-    </section>
-    <!-- 台積電簡介結束 -->
+
     <!-- 停車場位址開始 -->
     <section class="project-area">
      <div class="container-fluid">
