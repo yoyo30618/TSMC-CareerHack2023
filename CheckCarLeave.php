@@ -7,6 +7,27 @@
 			include_once ("conn_mysql.php");
 			$Isphoto=False;
 			if(!empty($_FILES['LicenseLeavePhoto']['name'])){//如果有拿到照片，取得車牌
+				/*將檔案存放置伺服器*/
+				$NowFileName="";
+				if(isset($_FILES['LicenseLeavePhoto'])){
+					$errors= array();
+					$file_name = $_FILES['LicenseLeavePhoto']['name'];
+					$file_size = $_FILES['LicenseLeavePhoto']['size'];
+					$file_tmp = $_FILES['LicenseLeavePhoto']['tmp_name'];
+					$file_type = $_FILES['LicenseLeavePhoto']['type'];
+					$file_ext=strtolower(end(explode('.',$_FILES['LicenseLeavePhoto']['name'])));
+					$extensions= array("jpeg","jpg","png");
+					$NowFileName=date("Ymd_His").".".$file_ext;
+					if(in_array($file_ext,$extensions)=== false){
+					$errors[]="extension not allowed, please choose a JPEG or PNG file.";
+					}
+					if(empty($errors)==true) {
+						move_uploaded_file($file_tmp,"LeaveImage/".$NowFileName);
+					}else{
+						print_r($errors);
+					}
+				}
+				/*將檔案存放置伺服器成功*/
 				$License=exec("python3 test.py 5");
 				$Isphoto=true;
 			}
@@ -40,28 +61,11 @@
 				if($OldPark=="D")
 					$sql_query_SetOldPark="UPDATE `parkstatusd` SET `IsParked`='0' WHERE `SpaceID`='".$OldSpaceNum."'";
 				$SetOldPark_result=mysqli_query($db_link,$sql_query_SetOldPark) or die("查詢失敗");//查詢帳密
+				
+				/*必定離場 離場後檢查是否違規*/
+				
 
-				/*將檔案存放置伺服器*/
-				$NowFileName="";
-				if(isset($_FILES['LicenseLeavePhoto'])){
-					$errors= array();
-					$file_name = $_FILES['LicenseLeavePhoto']['name'];
-					$file_size = $_FILES['LicenseLeavePhoto']['size'];
-					$file_tmp = $_FILES['LicenseLeavePhoto']['tmp_name'];
-					$file_type = $_FILES['LicenseLeavePhoto']['type'];
-					$file_ext=strtolower(end(explode('.',$_FILES['LicenseLeavePhoto']['name'])));
-					$extensions= array("jpeg","jpg","png");
-					$NowFileName=date("Ymd_His").".".$file_ext;
-					if(in_array($file_ext,$extensions)=== false){
-					$errors[]="extension not allowed, please choose a JPEG or PNG file.";
-					}
-					if(empty($errors)==true) {
-						move_uploaded_file($file_tmp,"LeaveImage/".$NowFileName);
-					}else{
-						print_r($errors);
-					}
-				}
-				/*將檔案存放置伺服器成功*/
+
 				
 				//找到該筆，確認離場
 				if(!$Isphoto)

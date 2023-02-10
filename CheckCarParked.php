@@ -7,6 +7,27 @@
 			include_once ("conn_mysql.php");
 			$Isphoto=False;
 			if(!empty($_FILES['LicenseParkedPhoto']['name'])){//如果有拿到照片，取得車牌
+				/*將檔案存放置伺服器*/
+				$NowFileName="";
+				if(isset($_FILES['LicenseParkedPhoto'])){
+					$errors= array();
+					$file_name = $_FILES['LicenseParkedPhoto']['name'];
+					$file_size = $_FILES['LicenseParkedPhoto']['size'];
+					$file_tmp = $_FILES['LicenseParkedPhoto']['tmp_name'];
+					$file_type = $_FILES['LicenseParkedPhoto']['type'];
+					$file_ext=strtolower(end(explode('.',$_FILES['LicenseParkedPhoto']['name'])));
+					$extensions= array("jpeg","jpg","png");
+					$NowFileName=date("Ymd_His").".".$file_ext;
+					if(in_array($file_ext,$extensions)=== false){
+						$errors[]="extension not allowed, please choose a JPEG or PNG file.";
+					}
+					if(empty($errors)==true) {
+						move_uploaded_file($file_tmp,"ParkedImage/".$NowFileName);
+					}else{
+						print_r($errors);
+					}
+				}
+				/*將檔案存放置伺服器成功*/
 				$License=exec("python3 test.py 5");
 				$Isphoto=true;
 			}
@@ -55,30 +76,37 @@
 							$sql_query_SetOldPark="UPDATE `parkstatusd` SET `IsParked`='0' WHERE `SpaceID`='".$OldSpaceNum."'";
 						$SetOldPark_result=mysqli_query($db_link,$sql_query_SetOldPark) or die("查詢失敗");//查詢帳密
 					}
-
-
-					/*將檔案存放置伺服器*/
-					$NowFileName="";
-					if(isset($_FILES['LicenseParkedPhoto'])){
-						$errors= array();
-						$file_name = $_FILES['LicenseParkedPhoto']['name'];
-						$file_size = $_FILES['LicenseParkedPhoto']['size'];
-						$file_tmp = $_FILES['LicenseParkedPhoto']['tmp_name'];
-						$file_type = $_FILES['LicenseParkedPhoto']['type'];
-						$file_ext=strtolower(end(explode('.',$_FILES['LicenseParkedPhoto']['name'])));
-						$extensions= array("jpeg","jpg","png");
-						$NowFileName=date("Ymd_His").".".$file_ext;
-						if(in_array($file_ext,$extensions)=== false){
-							$errors[]="extension not allowed, please choose a JPEG or PNG file.";
-						}
-						if(empty($errors)==true) {
-							move_uploaded_file($file_tmp,"ParkedImage/".$NowFileName);
-						}else{
-							print_r($errors);
+					$IsVIPPark=false;
+					if($Park=="A"){
+						$sql_query_CheckVIPPark="SELECT * FROM `parkstatusa` WHERE `SpaceID`='".$SpaceNum."'";
+						$CheckVIPPark_result=mysqli_query($db_link,$sql_query_CheckVIPPark) or die("查詢失敗");
+						while($row=mysqli_fetch_array($CheckVIPPark_result)){
+							if($row['IsVIP']==1)
+								$IsVIPPark=true;
+							break;
 						}
 					}
-					/*將檔案存放置伺服器成功*/
-
+					if($IsVIPPark){//如果停放到VIP區了 但並沒有預約 通知並處罰
+						$sql_query_CheckViolation="SELECT * FROM `vip` WHERE `SpaceID`='".$OldParkRec."' AND `License`='".$License."' AND `StartTime`<'".date( "Y-m-d H:i:s")."' AND `EndTime`>'".date( "Y-m-d H:i:s")."'";	
+						$IsOKVIP=false;
+						$CheckViolation_result=mysqli_query($db_link,$sql_query_CheckViolation) or die("查詢失敗");
+						$NowInVIP=-1;
+						while($row=mysqli_fetch_array($CheckViolation_result)){
+							$IsOKVIP=true;
+							$NowInVIP=$row['_ID'];
+							break;
+						}
+						if(!$IsOKVIP){//不合法的VIP 他停到不該停的位置了 他沒預約但停在VIP
+							//顯示不合法
+							echo"<script  language=\"JavaScript\">alert('此車輛並沒有預約此VIP車位！已自動新增至違規名單處罰三天');</script>";	
+							$sql_query_InsertNewBlack="INSERT INTO `blacklist`(`License`, `StartTime`, `EndTime`, `Info`) VALUES ('".$License."','".date( "Y-m-d H:i:s")."','".date( "Y-m-d H:i:s",strtotime('+3 day'))."','違停VIP車位處罰三天')";
+							$InsertNewBlack_result=mysqli_query($db_link,$sql_query_InsertNewBlack) or die("查詢失敗");
+						}
+						else{
+							$sql_query_UpdateVIP="UPDATE `vip` SET `IsUsed`='1' WHERE `_ID`='".$NowInVIP."'";
+							$UpdateVIP_result=mysqli_query($db_link,$sql_query_UpdateVIP) or die("查詢失敗");
+						}
+					}
 					/*需先將該停車場內格子設定為不可用*/
 					if($Park=="A")
 						$sql_query_SetPark="UPDATE `parkstatusa` SET `IsParked`='1' WHERE `SpaceID`='".$SpaceNum."'";
@@ -94,7 +122,7 @@
 					else
 						$sql_query_LicenseLeave="UPDATE `parkingrecord` SET `SpaceID`='".$SpaceID."',`ParkPhotoPath`='".$NowFileName."' WHERE `_ID`='".$ParkingID."'";
 					$LicenseLeave_result=mysqli_query($db_link,$sql_query_LicenseLeave) or die("查詢失敗");//查詢帳密
-					echo"<script  language=\"JavaScript\">alert('已成功設定車輛停妥');location.href=\"admin.php\";</script>";	
+					echo"<script  language=\"JavaScript\">alert('已成功設定車輛');location.href=\"admin.php\";</script>";	
 				}
 			}
 		} 

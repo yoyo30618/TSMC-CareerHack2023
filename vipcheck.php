@@ -13,7 +13,7 @@
 			}
 			else{
 				include_once ("conn_mysql.php");
-				$sql_query_booktime="INSERT INTO `vip`(`License`, `StartTime`, `EndTime`, `SpaceID`, `IsUsed`) VALUES ('".$License."','".$StartTime."','".$EndTime."','".$SpaceID."','1')";
+				$sql_query_booktime="INSERT INTO `vip`(`License`, `StartTime`, `EndTime`, `SpaceID`, `IsUsed`) VALUES ('".$License."','".$StartTime."','".$EndTime."','".$SpaceID."','0')";
 				$booktime_result=mysqli_query($db_link,$sql_query_booktime) or die("查詢失敗");
 				echo"<script  language=\"JavaScript\">alert('車位".$SpaceID."，時段".$StartTime."~".$EndTime."預約成功！');location.href=\"vip.php\";</script>";
 			}
