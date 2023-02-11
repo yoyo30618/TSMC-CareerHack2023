@@ -3,6 +3,10 @@ import sys
 import io
 import os
 import cv2
+<<<<<<< HEAD
+import re
+=======
+>>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
 import string
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,6 +15,12 @@ from google.cloud import vision
 class LicencePlateDetect:
     def __init__(self) -> None:
         self.model = torch.hub.load('ultralytics/yolov5', 'custom', path='LP_yolov5n_best.pt')
+<<<<<<< HEAD
+        # self.model =  torch.hub.load('WongKinYiu/yolov7', 'custom', 'yolov7x_best.pt',
+                        # force_reload=True, trust_repo=True)
+
+=======
+>>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
         pass
 
     def detect_and_crop(self, imgs_path, isMax=True, isBiggerBox=True):
@@ -61,9 +71,18 @@ class LicencePlateDetect:
                 if max_map < r[4]:
                     max_map = r[4]
                     max_index = len(cropped_imgs)-1
+<<<<<<< HEAD
+        if len(cropped_imgs) <= 0:
+            return "null","null"
+        
+        if isMax:
+            return boxes[max_index], cropped_imgs[max_index]
+        
+=======
                 
         if isMax:
             return boxes[max_index], cropped_imgs[max_index]
+>>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
         return boxes, cropped_imgs
 
 def LP(imgs_path):
@@ -115,6 +134,23 @@ def cloudVision():
 #             '{}\nFor more info on error messages, check: '
 #             'https://cloud.google.com/apis/design/errors'.format(
 #                 response.error.message))
+<<<<<<< HEAD
+    if texts == []:
+        print('')
+        return
+    text = texts[0].description.translate(str.maketrans({key: None for key in string.punctuation}))
+    text = text.replace(' ', '')
+    text = re.sub(r"[^A-Z0-9]+",'',text)
+    print(text)
+#     print(texts)
+    
+img_path = sys.argv[1]
+
+cropped_img = LP(img_path)
+if cropped_img == "null":
+    print("")
+    sys.exit(0)
+=======
 
     text = texts[0].description.translate(str.maketrans({key: None for key in string.punctuation}))
     text = text.replace(' ', '')
@@ -122,5 +158,6 @@ def cloudVision():
 img_path = sys.argv[1]
 cropeed_img = ""
 cropped_img = LP(img_path)
+>>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
 grayImage(cropped_img)
 cloudVision()

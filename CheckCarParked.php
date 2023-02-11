@@ -46,7 +46,7 @@
 				break;
 			}
 			if($Fd==0){
-				echo"<script  language=\"JavaScript\">alert('無該車入場紀錄，請檢查');location.href=\"admin.php\";</script>";
+				echo"<script  language=\"JavaScript\">alert('".$License."無該車入場紀錄，請檢查');location.href=\"admin.php\";</script>";
 			}
 			else{//找到該筆，確認停妥
 				$SpaceID=$_POST['SpaceID'];
@@ -78,7 +78,7 @@
 					}
 					$IsVIPPark=false;
 					if($Park=="A"){
-						$sql_query_CheckVIPPark="SELECT * FROM `parkstatusa` WHERE `SpaceID`='".$SpaceID."'";
+						$sql_query_CheckVIPPark="SELECT * FROM `parkstatusa` WHERE `SpaceID`='".$SpaceNum."'";
 						$CheckVIPPark_result=mysqli_query($db_link,$sql_query_CheckVIPPark) or die("查詢失敗");
 						while($row=mysqli_fetch_array($CheckVIPPark_result)){
 							if($row['IsVIP']==1)
@@ -87,8 +87,8 @@
 						}
 					}
 					if($IsVIPPark){//如果停放到VIP區了 但並沒有預約 通知並處罰
-						$sql_query_CheckViolation="SELECT * FROM `vip` WHERE `SpaceID`='".$OldParkRec."' AND `License`='".$License."' AND `StartTime`<'".date( "Y-m-d H:i:s")."' AND `EndTime`>'".date( "Y-m-d H:i:s")."'";	
-						echo $sql_query_CheckViolation;
+						$sql_query_CheckViolation="SELECT * FROM `vip` WHERE `SpaceID`='".$SpaceNum."' AND `License`='".$License."' AND `StartTime`<'".date( "Y-m-d H:i:s")."' AND `EndTime`>'".date( "Y-m-d H:i:s")."'";	
+						// echo $sql_query_CheckViolation;
 						$IsOKVIP=false;
 						$CheckViolation_result=mysqli_query($db_link,$sql_query_CheckViolation) or die("查詢失敗");
 						$NowInVIP=-1;
@@ -131,6 +131,32 @@
 							$sql_query_UpdateVIP="UPDATE `vip` SET `IsUsed`='1' WHERE `_ID`='".$NowInVIP."'";
 							$UpdateVIP_result=mysqli_query($db_link,$sql_query_UpdateVIP) or die("查詢失敗");
 						}
+					}
+					if($License==""){
+						$License="辨識車牌異常，請洽管理室";
+						$LineToken="";
+						$sql_query_CheckLineToken="SELECT * FROM `account`";
+						$CheckLineToken_result=mysqli_query($db_link,$sql_query_CheckLineToken) or die("查詢失敗2");//查詢帳密
+						while($row=mysqli_fetch_array($CheckLineToken_result)){
+							$LineToken=$row['LineToken'];
+							break;
+						}
+						/*底下為LINE NOTIFY的部分，傳送LINE確認*/
+						$headers = array(
+							'Content-Type: multipart/form-data',
+							'Authorization: Bearer '.$LineToken
+						);//宣告一下表頭與要傳送的TOKEN(權杖)，這樣才知道要傳給哪個BOT
+						$message = array(
+							'message' => '有一輛車牌辨識異常的車輛停在'.$SpaceID
+						);//宣告一下訊息內容
+						//一些關於curl的設定(有點類似網頁版本的CMD?)
+						$ch = curl_init();//想像成宣告一個空容器?
+						curl_setopt($ch , CURLOPT_URL , "https://notify-api.line.me/api/notify");//宣告要傳遞的網址
+						curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);//要傳遞的表頭
+						curl_setopt($ch, CURLOPT_POST, true);//POST方式傳遞
+						curl_setopt($ch, CURLOPT_POSTFIELDS, $message);//要傳遞的訊息內容
+						$result = curl_exec($ch);//把容器拋出去~!
+						curl_close($ch);
 					}
 					/*需先將該停車場內格子設定為不可用*/
 					if($Park=="A")

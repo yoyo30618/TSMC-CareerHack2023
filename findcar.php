@@ -73,10 +73,14 @@
             <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP位</a></li>
             <?php 
               if (isset($_COOKIE['TSMC_Islogin'])&&$_COOKIE['TSMC_Islogin']=="1"){
-                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個資查詢</a></li>";
+                echo "<li class='nav-item'><a class='nav-link' href='info.php'>資料查詢</a></li>";
                 if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
                   echo "<li class='nav-item'><a class='nav-link' href='NowTimeStatus.php'>實況</a></li>";
+<<<<<<< HEAD
+                  echo "<li class='nav-item'><a class='nav-link' href='admin.php'>模擬</a></li>";
+=======
                   echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺</a></li>";
+>>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
                   echo "<li class='nav-item'><a class='nav-link' href='SpaceManage.php'>車位管理</a></li>";
                   echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單</a></li>";   
                 }     
@@ -169,7 +173,7 @@
                 echo "<tr>";
                 echo "<td style='border: 1px solid red;width: 20%;'>".$row['License']."</td>";
                 echo "<td style='border: 1px solid red;width: 20%;'>".$row['SpaceID']."</td>";
-                echo "<td style='border: 1px solid red;width: 20%;'><a href='ParkedImage/".$row['ParkPhotoPath']."' target='_blank'>".$row['ParkPhotoPath']."</a></td>";
+                echo "<td style='border: 1px solid red;width: 20%;'><img src='ParkedImage/".$row['ParkPhotoPath']."' width='300' heigh='200'></td>";
                 echo "<td style='border: 1px solid red;width: 20%;'>".$row['EnterTime']."</td>";
                 $diff = date_diff(new DateTime(date( "Y-m-d H:i:s")), new DateTime($row['EnterTime']));
                 echo "<td style='border: 1px solid red;width: 20%;'>".$diff->format("%d 天 %h 小時 %i 分鐘 %s 秒")."</td>";
@@ -249,10 +253,14 @@
             <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP位</a></li>
             <?php 
               if (isset($_COOKIE['TSMC_Islogin'])&&$_COOKIE['TSMC_Islogin']=="1"){
-                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個資查詢</a></li>";
+                echo "<li class='nav-item'><a class='nav-link' href='info.php'>資料查詢</a></li>";
                 if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
                   echo "<li class='nav-item'><a class='nav-link' href='NowTimeStatus.php'>實況</a></li>";
+<<<<<<< HEAD
+                  echo "<li class='nav-item'><a class='nav-link' href='admin.php'>模擬</a></li>";
+=======
                   echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺</a></li>";
+>>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
                   echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單</a></li>";   
                 }     
                 echo "<li class='nav-item'>";

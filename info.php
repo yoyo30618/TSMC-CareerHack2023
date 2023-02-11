@@ -98,10 +98,14 @@
             <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP位</a></li>
             <?php 
               if (isset($_COOKIE['TSMC_Islogin'])&&$_COOKIE['TSMC_Islogin']=="1"){
-                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個資查詢</a></li>";
+                echo "<li class='nav-item'><a class='nav-link' href='info.php'>資料查詢</a></li>";
                 if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
                   echo "<li class='nav-item'><a class='nav-link' href='NowTimeStatus.php'>實況</a></li>";
+<<<<<<< HEAD
+                  echo "<li class='nav-item'><a class='nav-link' href='admin.php'>模擬</a></li>";
+=======
                   echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺</a></li>";
+>>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
                   echo "<li class='nav-item'><a class='nav-link' href='SpaceManage.php'>車位管理</a></li>";
                   echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單</a></li>";   
                 }     
@@ -130,11 +134,11 @@
     <!-- 上方背景橫幅開始-->
     <section class="breadcrumb-area">
      <div class="breadcrumb-content text-center">
-      <h1>個資查詢</h1>
+      <h1>資料查詢</h1>
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="index.php">首頁</a></li>
-        <li class="breadcrumb-item active" aria-current="page">個資查詢</li>
+        <li class="breadcrumb-item active" aria-current="page">資料查詢</li>
        </ol>
       </nav>
      </div>
@@ -279,15 +283,15 @@
                     if($row['EnterPhotoPath']=="手動輸入車牌無照片")
                       echo "<td style='border: 1px solid red;width: 12.5%;'><a>".$row['EnterPhotoPath']."</a></td>";
                     else
-                      echo "<td style='border: 1px solid red;width: 12.5%;'><a href='EnterImage/".$row['EnterPhotoPath']."' target='_blank'>".$row['EnterPhotoPath']."</a></td>";
+                      echo "<td style='border: 1px solid red;width: 12.5%;'><img src='EnterImage/".$row['EnterPhotoPath']."' width='300' heigh='200'></td>";
                     if($row['ParkPhotoPath']=="手動輸入車牌無照片")
                       echo "<td style='border: 1px solid red;width: 12.5%;'><a>".$row['ParkPhotoPath']."</a></td>";
                     else
-                      echo "<td style='border: 1px solid red;width: 12.5%;'><a href='ParkedImage/".$row['ParkPhotoPath']."' target='_blank'>".$row['ParkPhotoPath']."</a></td>";
+                      echo "<td style='border: 1px solid red;width: 12.5%;'><img src='ParkedImage/".$row['ParkPhotoPath']."' width='300' heigh='200'></td>";
                     if($row['LeavePhotoPath']=="手動輸入車牌無照片")
                       echo "<td style='border: 1px solid red;width: 12.5%;'><a>".$row['LeavePhotoPath']."</a></td>";
                     else
-                      echo "<td style='border: 1px solid red;width: 12.5%;'><a href='LeaveImage/".$row['LeavePhotoPath']."' target='_blank'>".$row['LeavePhotoPath']."</a></td>";
+                      echo "<td style='border: 1px solid red;width: 12.5%;'><img src='LeaveImage/".$row['LeavePhotoPath']."' width='300' heigh='200'></td>";
                     echo "<td style='border: 1px solid red;width: 12.5%;'>".$row['EnterTime']."</td>";
                     echo "<td style='border: 1px solid red;width: 12.5%;'>".$row['LeaveTime']."</td>";
                     if($row['LeaveTime']==null){
@@ -320,7 +324,81 @@
       </div>
     </section>
     <!-- 停放結束 -->
-
+    <div class="container" align="middle">
+        <form action="info.php" method="POST">
+          <legend>車位使用歷程</legend>
+          <table>
+            <tr>
+              <td>車位編號(英文+數字)</td>
+              <td><input type="text" name="SpaceID" id="LicenseInput5"></td>
+            </tr>
+            <tr>
+              <td colspan="2"><input type="submit" name="login" value="查詢"  style="width: 100%;" class="login_btn"/></td>
+            </tr>
+          </table>
+        </form>
+      </div>
+      <br>
+      <div class="container" align="middle">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="section-title">
+              <h2>車位使用歷程</h2>
+              <div class="section-line">
+                <span></span>
+              </div>
+              <table width="100%" style="border: 1px solid red;">
+                <thead>
+                  <tr>
+                    <th style="border: 1px solid red;width: 20%;">車牌</th>
+                    <th style="border: 1px solid red;width: 20%;">停放車格</th>
+                    <th style="border: 1px solid red;width: 20%;">入場時間</th>
+                    <th style="border: 1px solid red;width: 20%;">出場時間</th>
+                    <th style="border: 1px solid red;width: 20%;">停放時長</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <?php
+                      if(isset($_POST['SpaceID'])){
+                        $sql_query_FindCar="SELECT * FROM `parkingrecord` WHERE `SpaceID` like '%".$_POST['SpaceID']."%'";
+                        $FindCar_result=mysqli_query($db_link,$sql_query_FindCar) or die("查詢失敗");
+                        $Find=0;
+                        while($row=mysqli_fetch_array($FindCar_result)){
+                          $Find=1;
+                          echo "<tr>";
+                          echo "<td style='border: 1px solid red;width: 20%;'>".$row['License']."</td>";
+                          echo "<td style='border: 1px solid red;width: 20%;'>".$row['SpaceID']."</td>";
+                          echo "<td style='border: 1px solid red;width: 20%;'>".$row['EnterTime']."</td>";
+                          echo "<td style='border: 1px solid red;width: 20%;'>".$row['LeaveTime']."</td>";
+                          if($row['LeaveTime']==null){
+                            echo "<td>無法查詢</td>";
+                          }
+                          else{
+                            $diff = date_diff(new DateTime(date( "Y-m-d H:i:s")), new DateTime($row['EnterTime']));
+                            echo "<td style='border: 1px solid red;width: 20%;'>".$diff->format("%d 天 %h 小時 %i 分鐘 %s 秒")."</td>";
+                          }
+                          echo "</tr>";
+                        }
+                        if($Find==0){//沒找到
+                          echo "<tr>";
+                          echo "<td colspan='5' style='border: 1px solid red;'>此車牌目前尚未無停車紀錄</td>";
+                        echo "</tr>";
+                        }
+                      }
+                      else{
+                        echo "<tr>";
+                        echo "<td colspan='5' style='border: 1px solid red;'>此車牌目前尚未無停車紀錄</td>";
+                        echo "</tr>";
+                      }
+                    ?>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     <!-- 停車場連結開始 -->
     <div class="client-log-area section-padding">
      <div class="container">
@@ -377,10 +455,14 @@
             <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP位</a></li>
             <?php 
               if (isset($_COOKIE['TSMC_Islogin'])&&$_COOKIE['TSMC_Islogin']=="1"){
-                echo "<li class='nav-item'><a class='nav-link' href='info.php'>個資查詢</a></li>";
+                echo "<li class='nav-item'><a class='nav-link' href='info.php'>資料查詢</a></li>";
                 if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
                   echo "<li class='nav-item'><a class='nav-link' href='NowTimeStatus.php'>實況</a></li>";
+<<<<<<< HEAD
+                  echo "<li class='nav-item'><a class='nav-link' href='admin.php'>模擬</a></li>";
+=======
                   echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺</a></li>";
+>>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
                   echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單</a></li>";   
                 }     
                 echo "<li class='nav-item'>";

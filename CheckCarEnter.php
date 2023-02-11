@@ -85,11 +85,44 @@
 				echo"<script  language=\"JavaScript\">alert('車輛無權進入，請洽管理室');location.href=\"admin.php\";</script>";
 			}
 			else{
+<<<<<<< HEAD
+				if($License==""){
+					$License="辨識車牌異常，請洽管理室";
+					$LineToken="";
+					$sql_query_CheckLineToken="SELECT * FROM `account`";
+					$CheckLineToken_result=mysqli_query($db_link,$sql_query_CheckLineToken) or die("查詢失敗2");//查詢帳密
+					while($row=mysqli_fetch_array($CheckLineToken_result)){
+						$LineToken=$row['LineToken'];
+						break;
+					}
+					/*底下為LINE NOTIFY的部分，傳送LINE確認*/
+					$headers = array(
+						'Content-Type: multipart/form-data',
+						'Authorization: Bearer '.$LineToken
+					);//宣告一下表頭與要傳送的TOKEN(權杖)，這樣才知道要傳給哪個BOT
+					$message = array(
+						'message' => '有一輛車牌辨識異常的車輛即將入場'
+					);//宣告一下訊息內容
+					//一些關於curl的設定(有點類似網頁版本的CMD?)
+					$ch = curl_init();//想像成宣告一個空容器?
+					curl_setopt($ch , CURLOPT_URL , "https://notify-api.line.me/api/notify");//宣告要傳遞的網址
+					curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);//要傳遞的表頭
+					curl_setopt($ch, CURLOPT_POST, true);//POST方式傳遞
+					curl_setopt($ch, CURLOPT_POSTFIELDS, $message);//要傳遞的訊息內容
+					$result = curl_exec($ch);//把容器拋出去~!
+					curl_close($ch);
+				}
+=======
+>>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
 				if(!$Isphoto)
 					$sql_query_LicenseEnter="INSERT INTO `parkingrecord`(`License`, `EnterTime`, `IsIn`, `EnterPhotoPath`) VALUES ('".$License."','".date( "Y-m-d H:i:s")."','1','手動輸入車牌無照片')";
 				else
 					$sql_query_LicenseEnter="INSERT INTO `parkingrecord`(`License`, `EnterTime`, `IsIn`, `EnterPhotoPath`) VALUES ('".$License."','".date( "Y-m-d H:i:s")."','1','".$NowFileName."')";
+<<<<<<< HEAD
+				
+=======
 				// echo $sql_query_LicenseEnter;
+>>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
 				$LicenseEnter_result=mysqli_query($db_link,$sql_query_LicenseEnter) or die("查詢失敗3");//查詢帳密
 				echo"<script  language=\"JavaScript\">alert('已成功設定車輛進入');location.href=\"admin.php\";</script>";
 			} 
