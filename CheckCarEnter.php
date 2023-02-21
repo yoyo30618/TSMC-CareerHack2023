@@ -85,7 +85,6 @@
 				echo"<script  language=\"JavaScript\">alert('車輛無權進入，請洽管理室');location.href=\"admin.php\";</script>";
 			}
 			else{
-<<<<<<< HEAD
 				if($License==""){
 					$License="辨識車牌異常，請洽管理室";
 					$LineToken="";
@@ -112,17 +111,11 @@
 					$result = curl_exec($ch);//把容器拋出去~!
 					curl_close($ch);
 				}
-=======
->>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
 				if(!$Isphoto)
 					$sql_query_LicenseEnter="INSERT INTO `parkingrecord`(`License`, `EnterTime`, `IsIn`, `EnterPhotoPath`) VALUES ('".$License."','".date( "Y-m-d H:i:s")."','1','手動輸入車牌無照片')";
 				else
 					$sql_query_LicenseEnter="INSERT INTO `parkingrecord`(`License`, `EnterTime`, `IsIn`, `EnterPhotoPath`) VALUES ('".$License."','".date( "Y-m-d H:i:s")."','1','".$NowFileName."')";
-<<<<<<< HEAD
-				
-=======
 				// echo $sql_query_LicenseEnter;
->>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
 				$LicenseEnter_result=mysqli_query($db_link,$sql_query_LicenseEnter) or die("查詢失敗3");//查詢帳密
 				echo"<script  language=\"JavaScript\">alert('已成功設定車輛進入');location.href=\"admin.php\";</script>";
 			} 

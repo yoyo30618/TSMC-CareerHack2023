@@ -62,8 +62,6 @@
 				if($OldPark=="D")
 					$sql_query_SetOldPark="UPDATE `parkstatusd` SET `IsParked`='0' WHERE `SpaceID`='".$OldSpaceNum."'";
 				$SetOldPark_result=mysqli_query($db_link,$sql_query_SetOldPark) or die("查詢失敗");//查詢帳密
-<<<<<<< HEAD
-=======
 				
 				/*必定離場 離場後檢查是否違規*/
 				$sql_query_SetVIPLeave="SELECT * FROM `vip` WHERE `License`='".$License."' AND `IsUsed`='1'";
@@ -109,7 +107,6 @@
 				}
 		
 
->>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
 				
 				/*必定離場 離場後檢查是否違規*/
 				$sql_query_SetVIPLeave="SELECT * FROM `vip` WHERE `License`='".$License."' AND `IsUsed`='1'";

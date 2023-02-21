@@ -161,17 +161,10 @@
             <li class="nav-item"><a class="nav-link" href="vip.php">預約VIP位</a></li>
             <?php 
               if (isset($_COOKIE['TSMC_Islogin'])&&$_COOKIE['TSMC_Islogin']=="1"){
-<<<<<<< HEAD
-                echo "<li class='nav-item'><a class='nav-link' href='info.php'>資料查詢</a></li>";
-                if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
-                  echo "<li class='nav-item'><a class='nav-link' href='NowTimeStatus.php'>實況</a></li>";
-                  echo "<li class='nav-item'><a class='nav-link' href='admin.php'>模擬</a></li>";
-=======
                 echo "<li class='nav-item'><a class='nav-link' href='info.php'>個資查詢</a></li>";
                 if(isset($_COOKIE['TSMC_Status'])&&$_COOKIE['TSMC_Status']=="管理員"){
                   echo "<li class='nav-item'><a class='nav-link' href='NowTimeStatus.php'>實況</a></li>";
                   echo "<li class='nav-item'><a class='nav-link' href='admin.php'>後臺</a></li>";
->>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
                   echo "<li class='nav-item'><a class='nav-link' href='SpaceManage.php'>車位管理</a></li>";
                   echo "<li class='nav-item'><a class='nav-link' href='blackwhitelist.php'>黑白名單</a></li>";   
                 }     
@@ -268,21 +261,13 @@
                     if($NowEnterPath[$i]=="手動輸入車牌無照片")
                       echo "<td style='border: 1px solid red;text-align:center;text-align:center'>手動輸入車牌無照片</td>";
                     else
-<<<<<<< HEAD
-                    echo "<td style='border: 1px solid red;text-align:center;text-align:center'><img src='EnterImage/".$NowEnterPath[$i]."' width='300' heigh='200' alt='尚無圖片'></td>";
-=======
                     echo "<td style='border: 1px solid red;text-align:center;text-align:center'><img src='EnterImage/".$NowEnterPath[$i]."' width='300' heigh='200'></td>";
->>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
                     echo "<td style='border: 1px solid red;text-align:center;text-align:center'>".$NowLeaveLicense[$i]."</td>";
                     echo "<td style='border: 1px solid red;text-align:center;text-align:center'>".$NowLeaveTime[$i]."</td>";
                     if($NowLeavePath[$i]=="手動輸入車牌無照片")
                       echo "<td style='border: 1px solid red;text-align:center;text-align:center'>手動輸入車牌無照片</td>";
                     else
-<<<<<<< HEAD
                       echo "<td style='border: 1px solid red;text-align:center;text-align:center'><img src='LeaveImage/".$NowLeavePath[$i]."' width='300' heigh='200' alt='尚無圖片'></td>";
-=======
-                      echo "<td style='border: 1px solid red;text-align:center;text-align:center'><img src='LeaveImage/".$NowLeavePath[$i]."' width='300' heigh='200'></td>";
->>>>>>> dc6086cca414cb56879b1d723b4a5480f6308fe4
                     echo "<tr>";
                     echo "</tr>";
                   }
